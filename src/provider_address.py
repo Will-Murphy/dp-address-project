@@ -1,8 +1,10 @@
-import argparse, sys, os, csv, configparser
+import argparse, sys, os, csv
+import io_utilities
 
-from smartystreets_python_sdk import StaticCredentials, exceptions, Batch, ClientBuilder
-from smartystreets_python_sdk.us_street import Lookup
+from smarty_address_service import SmartyAddressService
+ 
 
+# TODO: clean up imports 
 '''
 # Sample usage
 python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFILE] --outfile
@@ -36,110 +38,21 @@ def run_one(args=None):
 
 def run_batch(args=None):
 
-    api_credentials = get_api_credentials(args['config'])
-    client = ClientBuilder(api_credentials).build_us_street_api_client()
-    batch_list = create_batch_list(args["infile"])
-
-    with open (args['outfile'], 'w', newline = '') as csv_address_outfile: 
-        csvWriter = csv.writer(csv_address_outfile, delimiter = ',', quotechar = "'" )
-        for batch in batch_list:
-            processed_batch = process_batch_with_service(batch,client)
-            # address standardization/validation and standardization
-            if args['geoval']: 
-                create_geocoding_and_validation_csv(csvWriter, processed_batch)
-            # address geocoding only 
-            elif args['geocode']:
-                create_geocoding_csv( csvWriter, processed_batch )  
-            # address address standardization/validation
-            else:
-                create_validation_csv( csvWriter, processed_batch )
-
-
-# helper for connecting to API
-def get_api_credentials(config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    auth_id = config.get('ADDRESS SERVICE', 'id' )
-    auth_token = config.get('ADDRESS SERVICE', 'key')
-    credentials = StaticCredentials(auth_id, auth_token)
-    return credentials
-
-# helper for batch processing 
-def create_batch_list(infile):
-    with open (infile, newline = '') as csv_address_infile:
-        csvReader = csv.reader(csv_address_infile, delimiter = ',')
-        batch_list = []
-        # pass over first line w column info 
-        # TODO: use logic here for stream vs batch 
-        try:
-            csvReader.__next__() 
-        except StopIteration as err:
-            print(err)
-            print("ensure input file not empty")
-        
-        batch = Batch() 
-        for row in csvReader:
-            address = str(row[0])
-
-            if batch.__len__() == batch.MAX_BATCH_SIZE:
-                batch_list.append(batch)
-                batch = Batch()
-        
-            # TODO: change condition 
-            if len(address)>10:
-                batch.add(Lookup(address))
-
-        if batch.__len__()>0:
-            batch_list.append(batch)
-    return batch_list
-
-# helper for batch processing
-def process_batch_with_service( batch, client):
-    try:
-        client.send_batch(batch)
-        return batch
-    except exceptions.SmartyException as err:
-        print(err)
-        return
-
-# helper for geocoding output
-def create_geocoding_csv( csvWriter, processed_batch):
-    csvWriter.writerow(['address', 'latitude', 'longitude'])
-    for lookup in processed_batch:
-        candidates = lookup.result
-        if len(candidates) == 0:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street), "", ""])
-            print("Address {} is invalid".format(lookup.street))
-        else:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street), candidates[0].metadata.latitude, candidates[0].metadata.longitude])
-
-# helper for address validation output
-def create_validation_csv( csvWriter, processed_batch):
-    # TODO: Incorporate returned correction codes if want to return whether given address is truly valid( if it matters ) 
-    # TODO: if delivery line >50 characters ?
-    csvWriter.writerow(['address', 'is_valid', 'corrected_address'])
-    for lookup in processed_batch:
-        candidates = lookup.result
-        if len(candidates) == 0:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street), "false",""])
-            print("Address {} is invalid".format(lookup.street))
-        else:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street),"true", "{}, {}".format(candidates[0].delivery_line_1, candidates[0].last_line)])
-
-# helper for geocoding and address validation/standardization output
-def create_geocoding_and_validation_csv(csvWriter, processed_batch):
-    csvWriter.writerow(['address', 'is_valid', 'corrected_address', 'latitude', 'longitude'])
-    for lookup in processed_batch:
-        candidates = lookup.result
-        if len(candidates) == 0:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street), "false","", "", ""])
-            print("Address {} is invalid".format(lookup.street))
-        else:
-            csvWriter.writerow(['\"{}\"'.format(lookup.street),"true", "{}, {}".format(candidates[0].delivery_line_1,
-                 candidates[0].last_line), candidates[0].metadata.latitude, candidates[0].metadata.longitude])
+    address_service = SmartyAddressService()
+    address_service.load_config(args['config'])
     
+    # Standardization/Validation and geocoding 
+    if int(args['options']) == 0: 
+        address_service.validate_and_geocode(args)
+    # Geocoding only 
+    elif int(args['options']) == 1:
+        address_service.geocode(args)
+    # Standardization/Validation only 
+    elif int(args['options']) == 2:
+        address_service.validate(args)
     
 
+    
 if __name__ == '__main__':
     # Define available arguments
     arg_parser = argparse.ArgumentParser(description="provider address handler")
@@ -149,11 +62,8 @@ if __name__ == '__main__':
         help='infile csv file with provider data, in a single address column')
     arg_parser.add_argument('--outfile', nargs='?', default=None, required=True, 
         help='specified output file required')
-    arg_parser.add_argument('--geocode', nargs='?', default=False, required=False, 
-        help='adding this argument enables forward address geocoding')
-    arg_parser.add_argument('--geoval', nargs='?', default=False, required=False, 
-        help='adding this argument combines address validation/standardization and geocoding')
-
+    arg_parser.add_argument('--options', nargs='?', default=0, required=False, 
+        help='options to choose what program outputs')
     
     
     # Get variables from the arguments

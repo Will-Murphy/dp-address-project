@@ -11,11 +11,11 @@ def run(args=None):
 
 
 def create_batch(args=None):
-    with open ('../npi-sample-data/npi_data_dec_2019.csv', newline = '') as csv_infile, open('../npi-sample-data/npi_small_batch.csv', 'w', newline = '') as csv_outfile_test:
+    with open ('../npi-sample-data/npi_data_dec_2019.csv', newline = '') as csv_infile, open('../npi-sample-data/npi_sample_batch.csv', 'w', newline = '') as csv_outfile_test:
         csvReader = csv.DictReader(csv_infile, delimiter = ',')
-        csvWriter = csv.writer(csv_outfile_test, delimiter =',', quotechar = "'")
+        csvWriter = csv.writer(csv_outfile_test, delimiter =',')
         csvWriter.writerow(["address"])
-        count = 1
+        count = 0
         while count < int(args["batchsize"]):
             row = csvReader.__next__()
             line1 = row["Provider First Line Business Practice Location Address"]
@@ -24,6 +24,7 @@ def create_batch(args=None):
             state = row["Provider Business Practice Location Address State Name"]
             zip  = row["Provider Business Practice Location Address Postal Code"]
             address_str = '"' + line1 +' ' +  line2 +' '+ city + ' ' +  state +' ' + zip + '"'
+
             csvWriter.writerow(["{}".format(str(address_str))])
             print( address_str, len(address_str) ) 
             count += 1
