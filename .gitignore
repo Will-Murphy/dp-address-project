@@ -1,2 +1,6 @@
 config.cfg
-*/out.csv
+*out.csv
+*.pyc
+*.pyo
+*./__pycache__
+

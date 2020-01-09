@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 class AddressService (ABC): 
     ''' 
-    Abstract Class for creating a service specific implementation of the 
-    dp-address-project. If a method is not provided by a service, the 
-    function should raise an error and tell the user so. 
+    Abstract Class outlining basic specifications for service specific implementation of the 
+    dp-address-project. If a method is not provided by a particular service implmentation, the 
+    method should raise an error and tell the user so. 
     '''
 
     # Resonsible for loading configs and setting up client 

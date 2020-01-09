@@ -6,4 +6,4 @@ class Address ():
         self.line_2 = None 
         self.latitude = None
         self.longitude = None 
-        self.valid = None 
+        self.is_valid = None 

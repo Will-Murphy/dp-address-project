@@ -1,4 +1,5 @@
 import argparse, sys
+import io_utilities
 
 from smarty_address_service import SmartyAddressService
 
@@ -18,7 +19,7 @@ python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFI
  - "freeform" input address is saved in the smarty streets 'Lookup' object in the 'street' attribute
  - Later use potentially address opensource lib for problem "freeform" inputs, or altogether
 '''
- 
+#TODO: add logic for run one 
 def run(args=None):
     if not args:
         return
@@ -30,24 +31,29 @@ def run(args=None):
     else:
         run_one(args=args)
     '''
+# TODO: implement this method
 def run_one(args=None):
     pass
-    # implementation
-    # can adapt batch handling for this
-
+    
 def run_batch(args=None):
 
     address_service = SmartyAddressService()
     address_service.load_config(args['config'])
     
     if int(args['options']) == 0: 
-        address_service.validate_and_geocode(args)
-   
+        input_address_list = io_utilities.read_address_input(args["infile"])
+        processed_address_list = address_service.validate_and_geocode(args, input_address_list)
+        io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
+
     elif int(args['options']) == 1:
-        address_service.geocode(args)
+        input_address_list = io_utilities.read_address_input(args["infile"])
+        processed_address_list = address_service.geocode(args, input_address_list)
+        io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
 
     elif int(args['options']) == 2:
-        address_service.validate(args)
+        input_address_list = io_utilities.read_address_input(args["infile"])
+        processed_address_list = address_service.validate(args, input_address_list)
+        io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
     
     else: 
         print("options parameter takes number 0-2")

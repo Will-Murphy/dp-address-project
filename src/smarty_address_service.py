@@ -1,5 +1,4 @@
 import configparser
-import io_utilities
 
 from address_service import AddressService
 from address import Address
@@ -13,8 +12,9 @@ class SmartyAddressService (AddressService):
     It implements that abstract class with some helper methods. 
     '''
 
+    MAX_ADDRESSES_PER_REQUEST = 100 
+
     def __init__(self):
-        self.MAX_ADDRESSES_PER_REQUEST = 100 
         self.client = None 
 
     def load_config(self, config_file):
@@ -35,28 +35,33 @@ class SmartyAddressService (AddressService):
             return
     
     #TODO: clarify naming in this function, add parameters for stream
-    def format_request(self,  address_data = []):
-        requests_in_batch = []
-        single_request_data = Batch() 
-        for address in address_data:
-            address = str(address)
+    def prepare_smarty_requests_list(self,  address_list):
+         
+        # smarty "Batch" object to hold multi-address request 
+        single_request_batch_partition = Batch()
+        addresses_per_request = 0
+        request_list = []
+        for address in address_list:
+            
+            if addresses_per_request == SmartyAddressService.MAX_ADDRESSES_PER_REQUEST:
+                request_list.append(single_request_batch_partition)
+                single_request_batch_partition = Batch()
+                addresses_per_request = 0
+                
 
-            if single_request_data.__len__() == self.MAX_ADDRESSES_PER_REQUEST:
-                requests_in_batch.append(single_request_data)
-                single_request_data = Batch()
-    
-            single_request_data.add(Lookup(address))
-
-        if single_request_data.__len__()>0:
-            requests_in_batch.append(single_request_data)
-        return requests_in_batch
+            # Lookup is smarty object for address lookup
+            single_request_batch_partition.add(Lookup(address.input_string))
+            addresses_per_request+=1
+     
+        if addresses_per_request>0:
+            request_list.append(single_request_batch_partition)
+        return request_list
         
 
-    def validate(self, params):
-        address_input_data = io_utilities.read_address_input(params['infile'])
-        request_batch = self.format_request(address_input_data)
+    def validate(self, params, address_input_data):
+        request_list = self.prepare_smarty_requests_list(address_input_data)
         processed_address_list = []
-        for unprocessed_request in request_batch: 
+        for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
@@ -71,14 +76,13 @@ class SmartyAddressService (AddressService):
                     address.line_2 = candidates[0].last_line
                     address.is_valid = 'true'
                 processed_address_list.append(address)    
-        io_utilities.write_validation_csv_output(processed_address_list, params["outfile"])            
+        return processed_address_list          
 
 
-    def geocode(self, params):
-        address_input_data = io_utilities.read_address_input(params['infile'])
-        request_batch = self.format_request(address_input_data)
+    def geocode(self, params, address_input_data ):
+        request_list = self.prepare_smarty_requests_list(address_input_data)
         processed_address_list = []
-        for unprocessed_request in request_batch: 
+        for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
@@ -93,14 +97,13 @@ class SmartyAddressService (AddressService):
                     address.longitude = candidates[0].metadata.longitude
                     address.latitude = candidates[0].metadata.latitude
                 processed_address_list.append(address)    
-        io_utilities.write_geocode_csv_output(processed_address_list, params["outfile"]) 
- 
+        return processed_address_list
+
     #TODO: combine above functions into this one, and break up this function/above ones w helpers 
-    def validate_and_geocode(self, params):
-        address_input_data = io_utilities.read_address_input(params['infile'])
-        request_batch = self.format_request(address_input_data)
+    def validate_and_geocode(self, params, address_input_data ):
+        request_list = self.prepare_smarty_requests_list(address_input_data)
         processed_address_list = []
-        for unprocessed_request in request_batch: 
+        for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
@@ -117,8 +120,6 @@ class SmartyAddressService (AddressService):
                     address.line_2 = candidates[0].last_line
                     address.is_valid = 'true'
                 processed_address_list.append(address)    
-        io_utilities.write_general_csv_output(processed_address_list, params["outfile"]) 
-
-
+        return processed_address_list 
 
 
