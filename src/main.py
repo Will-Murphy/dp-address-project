@@ -2,6 +2,8 @@ import argparse, sys, os, csv
 import io_utilities
 
 from smarty_address_service import SmartyAddressService
+
+#TODO: fix file structure 
 '''
 # Sample usage
 python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFILE] --outfile
