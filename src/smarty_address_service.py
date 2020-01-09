@@ -66,7 +66,7 @@ class SmartyAddressService (AddressService):
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
                     address.is_valid = True
-            processed_address_list.append(address)    
+                processed_address_list.append(address)    
         io_utilities.write_validation_csv_output(processed_address_list, params["outfile"])            
 
 
@@ -88,7 +88,7 @@ class SmartyAddressService (AddressService):
                 else:
                     address.longitude = candidates[0].metadata.longitude
                     address.latitude = candidates[0].metadata.latitude
-            processed_address_list.append(address)    
+                processed_address_list.append(address)    
         io_utilities.write_geocode_csv_output(processed_address_list, params["outfile"]) 
  
     #TODO: combine above functions into this one, and break up this function/above ones w helpers 
@@ -101,7 +101,6 @@ class SmartyAddressService (AddressService):
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
                 candidates = lookup.result
-                print(candidates)
                 address = Address()
                 address.input_string = lookup.street
                 if len(candidates) == 0:
@@ -113,7 +112,7 @@ class SmartyAddressService (AddressService):
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
                     address.is_valid = True
-            processed_address_list.append(address)    
+                processed_address_list.append(address)    
         io_utilities.write_general_csv_output(processed_address_list, params["outfile"]) 
 
 

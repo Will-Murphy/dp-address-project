@@ -2,9 +2,6 @@ import argparse, sys, os, csv
 import io_utilities
 
 from smarty_address_service import SmartyAddressService
- 
-
-# TODO: clean up imports 
 '''
 # Sample usage
 python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFILE] --outfile
@@ -52,7 +49,6 @@ def run_batch(args=None):
         address_service.validate(args)
     
 
-    
 if __name__ == '__main__':
     # Define available arguments
     arg_parser = argparse.ArgumentParser(description="provider address handler")
