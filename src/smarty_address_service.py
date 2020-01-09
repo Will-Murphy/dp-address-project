@@ -58,7 +58,8 @@ class SmartyAddressService (AddressService):
             request_list.append(single_request_batch_partition)
         return request_list
         
-
+    # TODO:get rid of validate and geocode and break up this function/above ones w helpers 
+    # TODO: fix so dont create new addresses here, read them from address_input_data
     def validate(self, params, address_input_data):
         request_list = self.prepare_smarty_requests_list(address_input_data)
         processed_address_list = []
@@ -100,7 +101,7 @@ class SmartyAddressService (AddressService):
                 processed_address_list.append(address)    
         return processed_address_list
 
-    #TODO: combine above functions into this one, and break up this function/above ones w helpers 
+
     def validate_and_geocode(self, params, address_input_data ):
         request_list = self.prepare_smarty_requests_list(address_input_data)
         processed_address_list = []
