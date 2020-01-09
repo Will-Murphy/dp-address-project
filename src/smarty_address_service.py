@@ -1,14 +1,18 @@
 import configparser
 import io_utilities
 
-from address_service_class import AddressService
-from address_class import Address
+from address_service import AddressService
+from address import Address
 
 from smartystreets_python_sdk import StaticCredentials, exceptions, Batch, ClientBuilder
 from smartystreets_python_sdk.us_street import Lookup
 
 class SmartyAddressService (AddressService):
-    
+    '''
+    Class represents smarty Streets US_STREETS_API Specific implementation of AddressService class. 
+    It implements that abstract class with some helper methods. 
+    '''
+
     def __init__(self):
         self.MAX_ADDRESSES_PER_REQUEST = 100 
         self.client = None 
@@ -60,12 +64,12 @@ class SmartyAddressService (AddressService):
                 address = Address()
                 address.input_string = lookup.street
                 if len(candidates) == 0:
-                    address.is_valid = False
+                    address.is_valid = 'false'
                     print(f'{address.input_string} is invalid')
                 else:
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
-                    address.is_valid = True
+                    address.is_valid = 'true'
                 processed_address_list.append(address)    
         io_utilities.write_validation_csv_output(processed_address_list, params["outfile"])            
 
@@ -83,7 +87,7 @@ class SmartyAddressService (AddressService):
                 address.input_string = lookup.street
                 if len(candidates) == 0:
                     #TODO: is making this false correct behaviour?
-                    address.is_valid = False
+                    address.is_valid = 'false'
                     print(f'{address.input_string} is invalid')
                 else:
                     address.longitude = candidates[0].metadata.longitude
@@ -104,14 +108,14 @@ class SmartyAddressService (AddressService):
                 address = Address()
                 address.input_string = lookup.street
                 if len(candidates) == 0:
-                    address.is_valid = False
+                    address.is_valid = 'false'
                     print(f'{address.input_string} is invalid')
                 else:
                     address.longitude = candidates[0].metadata.longitude
                     address.latitude = candidates[0].metadata.latitude
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
-                    address.is_valid = True
+                    address.is_valid = 'true'
                 processed_address_list.append(address)    
         io_utilities.write_general_csv_output(processed_address_list, params["outfile"]) 
 
