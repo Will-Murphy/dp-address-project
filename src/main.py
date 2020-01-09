@@ -25,12 +25,7 @@ def run(args=None):
         return
     else:
         run_batch(args=args)
-    '''
-    if args['batchsize']:
-        run_batch(args=args)
-    else:
-        run_one(args=args)
-    '''
+    
 # TODO: implement this method
 def run_one(args=None):
     pass
@@ -48,12 +43,12 @@ def run_batch(args=None):
     elif int(args['options']) == 1:
         input_address_list = io_utilities.read_address_input(args["infile"])
         processed_address_list = address_service.geocode(args, input_address_list)
-        io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
+        io_utilities.write_geocode_csv_output(processed_address_list, args['outfile'] )
 
     elif int(args['options']) == 2:
         input_address_list = io_utilities.read_address_input(args["infile"])
         processed_address_list = address_service.validate(args, input_address_list)
-        io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
+        io_utilities.write_validation_csv_output(processed_address_list, args['outfile'] )
     
     else: 
         print("options parameter takes number 0-2")
