@@ -34,7 +34,8 @@ class SmartyAddressService (AddressService):
             print(err)
             return
     
-    #TODO: clarify naming in this function, add parameters for stream
+    #TODO: add parameters for stream, deal with smarty batch problem in this logic
+    # vs in geocode, validation
     def prepare_smarty_requests_list(self,  address_list):
          
         # smarty "Batch" object to hold multi-address request 
