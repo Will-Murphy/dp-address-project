@@ -11,7 +11,7 @@ class AddressService (ABC):
     raise an error and tell the user so e.g.:
 
     def reverse_geocode(self, params, data):
-        raise NotImplementedError(f'{type(self).__name__} does not provide reverse geocoding') 
+        raise NotImplementedError(f'{type(self).__name__} does not provide this service') 
     """
 
     @abstractmethod

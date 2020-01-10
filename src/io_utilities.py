@@ -34,13 +34,14 @@ def read_coordinate_input(infile):
             raise 
         address_object_list = []
         for row in csvReader:
-            latitude = str(row[0])
-            longitude = str(row[1])
+            latitude = row[0]
+            longitude = row[1]
             #TODO:change condition
-            if len(latitude)>0 and len(longitude)>0: 
+            if latitude and longitude:
                 address = Address()
                 address.latitude = latitude
-                address.longitue = longitude   
+                address.longitude = longitude  
+                address_object_list.append(address)
     return address_object_list
     
 
@@ -104,10 +105,10 @@ def __write_general_data(csvWriter, address):
                         address.latitude,
                         address.longitude ])
 
-def __write_reverse_geocode_header (csvWriter):
+def __write_reverse_geocode_header(csvWriter):
     csvWriter.writerow(['latitude', 'longitude', 'address'])
 
-def __write_reverse_geocode_data  (csvWriter, address):
+def __write_reverse_geocode_data(csvWriter, address):
     csvWriter.writerow([address.latitude,
                         address.longitude,
                         f'{str(address.line_1)}'])

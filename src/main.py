@@ -2,6 +2,7 @@ import argparse, sys
 import io_utilities
 
 from smarty_address_service import SmartyAddressService
+from open_cage_address_service import OpenCageAddressService
 
 #TODO: fix file structure, implement stream 
         
@@ -25,15 +26,19 @@ def run(args=None):
         return
     else:
         run_batch(args=args)
-    
+   
 # TODO: implement this method
 def run_one(args=None):
     pass
-    
+
+#TODO: make logic operations ordering more logical
 def run_batch(args=None):
 
     address_service = SmartyAddressService()
     address_service.load_config(args['config'])
+
+    address_service_2 = OpenCageAddressService()
+    address_service_2.load_config(args['config'])
     
     # Geocode and validate 
     if int(args['options']) == 0: 
@@ -60,8 +65,8 @@ def run_batch(args=None):
     # Reverse Geocode 
     elif int(args['options']) == 3:
 
-        input_address_list = io_utilities.read_address_input(args["infile"])
-        processed_address_list = address_service.reverse_geocode(args, input_address_list)
+        input_coordinate_list = io_utilities.read_coordinate_input(args["infile"])
+        processed_address_list = address_service_2.reverse_geocode(args, input_coordinate_list)
         io_utilities.write_reverse_geocode_csv_output(processed_address_list, args['outfile'] )
 
     else: 
