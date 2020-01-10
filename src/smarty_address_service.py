@@ -15,6 +15,7 @@ class SmartyAddressService (AddressService):
 
     MAX_ADDRESSES_PER_REQUEST = 100 
 
+    # TODO: add number of processed addresses variable 
     def __init__(self):
         self.client = None 
 
@@ -27,7 +28,7 @@ class SmartyAddressService (AddressService):
         self.client = ClientBuilder(api_credentials).build_us_street_api_client()
 
 
-    #TODO: clarify naming in this function, add parameters for stream
+    #TODO: clarify naming in this function, add parameters for stream logic
     def send_request(self, params, address_data):
         try:
             self.client.send_batch(address_data)
@@ -58,18 +59,17 @@ class SmartyAddressService (AddressService):
     
 
     def reverse_geocode(self, params, coordinate_input_data):
-        raise NotImplementedError(f'{type(self).__name__} does not provide reverse geocoding')
+        raise NotImplementedError(f'{type(self).__name__} does not provide this service')
 
 
     
     ########### Smarty Batch Processing Helpers ###########
-
     def __is_address_list_processed(self, address_list):
         """
         Checks if address list has already been processed
          
         Used to avoid processing list twice, since smarty streets geocodes and validates in 
-        the same request. 
+        the same request.  add note for logic 
         """
         # TODO: make this condition more robust
         if address_list[0].is_valid is None:
@@ -122,14 +122,14 @@ class SmartyAddressService (AddressService):
                 candidates = lookup.result
                 address = next(address_iterator)
                 if len(candidates) == 0:
-                    address.is_valid = 'false'
+                    address.is_valid = False
                     print(f'{address.input_string} is invalid')
                 else:
                     address.longitude = candidates[0].metadata.longitude
                     address.latitude = candidates[0].metadata.latitude
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
-                    address.is_valid = 'true'
+                    address.is_valid = True
                 processed_address_list.append(address)    
         return processed_address_list 
 
