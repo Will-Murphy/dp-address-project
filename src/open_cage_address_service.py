@@ -8,7 +8,7 @@ from opencage.geocoder import InvalidInputError, RateLimitExceededError, Unknown
 
 class OpenCageAddressService (AddressService):
     """
-    Class represents Open Cage reverse and forward geocoding Specific implementation of AddressService class. 
+    Class represents Open Cage reverse and forward geocoding specific implementation of AddressService class. 
 
     It implements that abstract class with helper methods that deal with its specific API implmentation
     """ 
@@ -26,7 +26,7 @@ class OpenCageAddressService (AddressService):
         self.client = OpenCageGeocode(auth_key)
 
     
-    
+
     def send_request(self, params,  address_data):
         """ Responsible for sending request to service and returning processed data """
        
@@ -83,10 +83,6 @@ class OpenCageAddressService (AddressService):
             processed_address_list.append(address)
         return processed_address_list
         
-        
-
-            
-
 
 
     def reverse_geocode(self, params, address_input_data):
