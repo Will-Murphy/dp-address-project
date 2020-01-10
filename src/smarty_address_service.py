@@ -20,6 +20,7 @@ class SmartyAddressService (AddressService):
         self.client = None 
 
     def load_config(self, config_file):
+        """ Resonsible for loading configs and setting up client """
         config = configparser.ConfigParser()
         config.read(config_file)
         auth_id = config.get('SMARTY STREETS', 'id' )
@@ -30,6 +31,7 @@ class SmartyAddressService (AddressService):
 
     #TODO: clarify naming in this function, add parameters for stream logic
     def send_request(self, params, address_data):
+        """ Responsible for sending request to service and returning processed data """
         try:
             self.client.send_batch(address_data)
             return address_data
@@ -39,6 +41,11 @@ class SmartyAddressService (AddressService):
     
 
     def validate(self, params, address_input_data):
+        """ 
+        Reponsible for validating input addresses in stream or batch form.
+        
+        returns a single Address object or Address object list depending on stream or batch input.
+        """
         processed_address_list = []
         if self.__is_address_list_processed(address_input_data):
             processed_address_list = address_input_data
@@ -49,6 +56,11 @@ class SmartyAddressService (AddressService):
 
 
     def forward_geocode(self, params, address_input_data ):
+        """ 
+        Reponsible for forward geocoding input addresses in stream or batch form.
+        
+        returns a single Address object or Address object list depending on stream or batch input.
+        """
         processed_address_list = []
         if self.__is_address_list_processed(address_input_data):
             processed_address_list = address_input_data
@@ -59,6 +71,11 @@ class SmartyAddressService (AddressService):
     
 
     def reverse_geocode(self, params, coordinate_input_data):
+        """ 
+        Reponsible for forward geocoding input addresses in stream or batch form.
+        
+        returns a single Address object or Address object list depending on stream or batch input.
+        """
         raise NotImplementedError(f'{type(self).__name__} does not provide this service')
 
 
