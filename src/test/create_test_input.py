@@ -25,7 +25,7 @@ def create_batch(args=None):
             zip  = row["Provider Business Practice Location Address Postal Code"]
             address_str = line1 +' ' +  line2 +', '+ city + ' ' +  state +' ' + zip 
 
-            csvWriter.writerow(["{}".format(str(address_str))])
+            csvWriter.writerow([f'{str(address_str)}'])
             print( address_str, len(address_str) ) 
             count += 1
 

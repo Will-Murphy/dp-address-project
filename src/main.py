@@ -35,23 +35,37 @@ def run_batch(args=None):
     address_service = SmartyAddressService()
     address_service.load_config(args['config'])
     
+    # Geocode and validate 
     if int(args['options']) == 0: 
+
         input_address_list = io_utilities.read_address_input(args["infile"])
-        processed_address_list = address_service.validate_and_geocode(args, input_address_list)
+        validated_address_list = address_service.validate(args, input_address_list)
+        processed_address_list = address_service.forward_geocode(args, validated_address_list)
         io_utilities.write_general_csv_output(processed_address_list, args['outfile'] )
-
+    
+    # Geocode 
     elif int(args['options']) == 1:
-        input_address_list = io_utilities.read_address_input(args["infile"])
-        processed_address_list = address_service.geocode(args, input_address_list)
-        io_utilities.write_geocode_csv_output(processed_address_list, args['outfile'] )
 
+        input_address_list = io_utilities.read_address_input(args["infile"])
+        processed_address_list = address_service.forward_geocode(args, input_address_list)
+        io_utilities.write_forward_geocode_csv_output(processed_address_list, args['outfile'] )
+
+    # Validate
     elif int(args['options']) == 2:
+
         input_address_list = io_utilities.read_address_input(args["infile"])
         processed_address_list = address_service.validate(args, input_address_list)
         io_utilities.write_validation_csv_output(processed_address_list, args['outfile'] )
     
+    # Reverse Geocode 
+    elif int(args['options']) == 3:
+
+        input_address_list = io_utilities.read_address_input(args["infile"])
+        processed_address_list = address_service.reverse_geocode(args, input_address_list)
+        io_utilities.write_reverse_geocode_csv_output(processed_address_list, args['outfile'] )
+
     else: 
-        print("options parameter takes number 0-2")
+        print("options parameter takes number 0-3")
     
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 config.cfg
 **/out.csv
-**/pycache
+src/__pycache__/
 __pycache__/
 *.py[cod]
-**src/__pycache__/
+
