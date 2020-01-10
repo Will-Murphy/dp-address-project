@@ -52,7 +52,6 @@ def write_forward_geocode_csv_output(processed_address_list, outfile):
         for address in processed_address_list:
             __write_forward_geocode_data(csvWriter, address)
    
-
 def write_validation_csv_output(processed_address_list, outfile): 
     with open (outfile, 'w', newline = '') as csv_address_outfile: 
         csvWriter = csv.writer(csv_address_outfile, delimiter = ',')
@@ -67,6 +66,13 @@ def write_general_csv_output(processed_address_list, outfile):
         for address in processed_address_list:
             __write_general_data(csvWriter, address)
 
+def write_reverse_geocode_csv_output(processed_address_list, outfile):
+    with open (outfile, 'w', newline = '') as csv_address_outfile: 
+        csvWriter = csv.writer(csv_address_outfile, delimiter = ',')
+        __write_reverse_geocode_header(csvWriter)
+        for address in processed_address_list:
+            __write_reverse_geocode_data(csvWriter, address)
+   
 
 # helpers for csv writing functions 
 
