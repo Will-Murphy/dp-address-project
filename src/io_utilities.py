@@ -54,7 +54,6 @@ def write_general_csv_output(processed_address_list, outfile):
 
 
 ### helpers for respective csv writing functions above ###
-
 def _write_geocode_header(csvWriter):
     csvWriter.writerow(['address', 'latitude', 'longitude'])
 

@@ -59,16 +59,16 @@ class SmartyAddressService (AddressService):
         return request_list
         
     # TODO:get rid of validate and geocode and break up this function/above ones w helpers 
-    # TODO: fix so dont create new addresses here, read them from address_input_data
     def validate(self, params, address_input_data):
         request_list = self.prepare_smarty_requests_list(address_input_data)
+        address_iterator = iter(address_input_data)
         processed_address_list = []
         for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
                 candidates = lookup.result
-                address = Address()
+                address = next(address_iterator)
                 address.input_string = lookup.street
                 if len(candidates) == 0:
                     address.is_valid = 'false'
@@ -83,13 +83,14 @@ class SmartyAddressService (AddressService):
 
     def geocode(self, params, address_input_data ):
         request_list = self.prepare_smarty_requests_list(address_input_data)
+        address_iterator = iter(address_input_data)
         processed_address_list = []
         for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
                 candidates = lookup.result
-                address = Address()
+                address = next(address_iterator)
                 address.input_string = lookup.street
                 if len(candidates) == 0:
                     #TODO: is making this false correct behaviour?
@@ -103,15 +104,16 @@ class SmartyAddressService (AddressService):
 
 
     def validate_and_geocode(self, params, address_input_data ):
+        # TODO: ensure address input is same length as request list addresses or iterate problems
         request_list = self.prepare_smarty_requests_list(address_input_data)
+        address_iterator = iter(address_input_data)
         processed_address_list = []
         for unprocessed_request in request_list: 
             request_params = {}
             processed_request = self.send_request(request_params, unprocessed_request)
             for lookup in processed_request:
                 candidates = lookup.result
-                address = Address()
-                address.input_string = lookup.street
+                address = next(address_iterator)
                 if len(candidates) == 0:
                     address.is_valid = 'false'
                     print(f'{address.input_string} is invalid')
