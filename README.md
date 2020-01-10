@@ -9,7 +9,7 @@ python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_a
 ### For Forward Address Geocoding Only ###
 python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_output.csv' --options 1
 
-### For Address Validation and Standardization ONLY ###
+### For Address Validation Only ###
 python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/validation_output.csv' --options 2
 
 ### For Reverse Address Geocoding Only ###
