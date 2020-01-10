@@ -108,6 +108,7 @@ def __write_reverse_geocode_header (csvWriter):
     csvWriter.writerow(['latitude', 'longitude', 'address'])
 
 def __write_reverse_geocode_data  (csvWriter, address):
-    csvWriter.writerow([f'{str(address.line_1)}',
-                        address.latitude,
-                        address.longitude ])
+    csvWriter.writerow([address.latitude,
+                        address.longitude,
+                        f'{str(address.line_1)}'])
+                         
