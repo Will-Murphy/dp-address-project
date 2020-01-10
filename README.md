@@ -4,7 +4,7 @@ this project was done for Decision Point Healthcare Solutions : https://decision
 ## Sample usage :
 
 ### For Address Validation and Forward Geocoding ###
-python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_and_validation.csv' --options 0
+python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_and_validation_output.csv' --options 0
  
 ### For Forward Address Geocoding Only ###
 python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_output.csv' --options 1
