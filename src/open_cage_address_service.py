@@ -10,7 +10,6 @@ class OpenCageAddressService (AddressService):
     """
     Class represents Open Cage reverse and forward geocoding specific implementation of AddressService class. 
 
-    It implements that abstract class with helper methods that deal with its specific API implmentation
     """ 
 
     # TODO: add number of processed addresses variable 
@@ -25,11 +24,10 @@ class OpenCageAddressService (AddressService):
         auth_key = config.get('OPEN CAGE', 'key' )
         self.client = OpenCageGeocode(auth_key)
 
-    
-
+    #TODO: stream parameters 
     def send_request(self, params,  address_data):
         """ Responsible for sending request to service and returning processed data """
-       
+        
         # forward geocoding 
         if int(params["options"]) == 1: 
             address_query = u'{address_data.input_string}'
@@ -41,6 +39,7 @@ class OpenCageAddressService (AddressService):
             except InvalidInputError as invalid_err:
                 print(invalid_err)
                 raise
+
         # reverse geocoding 
         elif int(params["options"]) == 3:
             latitude = address_data.latitude
@@ -57,7 +56,6 @@ class OpenCageAddressService (AddressService):
                 raise
 
 
-
     def validate(self, params, data ):
         """ 
         Reponsible for validating input addresses in stream or batch form.
@@ -66,7 +64,6 @@ class OpenCageAddressService (AddressService):
         """
         raise NotImplementedError(f'{type(self).__name__} does not provide this service')
         
-    
 
     def forward_geocode(self, params, address_input_data):
         """ 
@@ -83,7 +80,6 @@ class OpenCageAddressService (AddressService):
             processed_address_list.append(address)
         return processed_address_list
         
-
 
     def reverse_geocode(self, params, address_input_data):
         """ 

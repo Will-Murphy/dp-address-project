@@ -1,22 +1,29 @@
 #  DP-Address-Project 
-### this project was done for Decision Point Healthcare Solutions : https://decisionpointhealth.com ###
+this project was done for Decision Point Healthcare Solutions : https://decisionpointhealth.com 
 
 ## Sample usage :
-python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFILE] --outfile
-                           [OUTFILE] [--geocode [GEOCODE]] [--geoval [GEOVAL]]
+
+### For Address Validation and Forward Geocoding ###
+python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_and_validation.csv' --options 0
+ 
+### For Forward Address Geocoding Only ###
+python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_output.csv' --options 1
 
 ### For Address Validation and Standardization ONLY ###
-python3 provider_address.py --config ../config.cfg --infile '../npi-sample-data/npi_sample_batch.csv' --outfile 'validation_sample_output.csv' 
+python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/validation_output.csv' --options 2
 
-### For Address Geocoding Only ###
-williammurphy$ python3 provider_address.py --config ../config.cfg --infile '../npi-sample-data/npi_sample_batch.csv' --outfile 'geocoding_sample_output.csv' --geocode True
+### For Reverse Address Geocoding Only ###
+python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/reverse_geocoding_output.csv' --options 3
 
-### For Address Validation and Standardization and Address Geocoding ###
-python3 provider_address.py --config ../config.cfg --infile '../npi-sample-data/npi_sample_batch.csv' --outfile 'geocoding_and_validation_sample_out.csv' --geoval True
-    
+
+## Sample input/output files: 
+see sample-input-output directory 
+
+
 ## Notes :
- - Third Party GeoCoding and Address Valdiation Service: Smarty Streets 
-  - Will probably desgin such that run batch can decide about stream or batch input and handle it
+ - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
+ - Third Party Reverse Geocoding Service: Open cage
+ - Will probably desgin such that run batch can decide about stream or batch input and handle it
     nearly identically
 
 ### SMARTY STREET specific notes ###: 

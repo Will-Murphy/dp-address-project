@@ -19,6 +19,7 @@ class SmartyAddressService (AddressService):
     def __init__(self):
         self.client = None 
 
+
     def load_config(self, config_file):
         """ Resonsible for loading configs and setting up client """
         config = configparser.ConfigParser()
@@ -72,9 +73,7 @@ class SmartyAddressService (AddressService):
 
     def reverse_geocode(self, params, coordinate_input_data):
         """ 
-        Reponsible for forward geocoding input addresses in stream or batch form.
-        
-        returns a single Address object or Address object list depending on stream or batch input.
+        Smarty Streets API does not support reverse geocoding
         """
         raise NotImplementedError(f'{type(self).__name__} does not provide this service')
 
@@ -120,7 +119,7 @@ class SmartyAddressService (AddressService):
             request_list.append(single_request_batch_partition)
         return request_list
 
-
+        
     def __smarty_process_address_input_data(self,request_list, address_input_data ):
         """
         Process address input data contained in request list through smarty streets api

@@ -10,16 +10,8 @@ from open_cage_address_service import OpenCageAddressService
 # Sample usage
 python3 provider_address.py provider_address.py --config [CONFIG] --infile [INFILE] --outfile
                            [OUTFILE] [--options [OPTIONS]]
-# Notes:
- - Third Party GeoCoding and Address Valdiation Service: Smarty Streets 
- - Will probably desgin such that run batch can decide about stream or batch input and handle it
-   nearly identically
-
-# SMARTY STREET specific notes: 
- - MAX_BATCH_SIZE = 100 lookups/request
- - "freeform" input address is saved in the smarty streets 'Lookup' object in the 'street' attribute
- - Later use potentially address opensource lib for problem "freeform" inputs, or altogether
 '''
+
 #TODO: add logic for run one 
 def run(args=None):
     if not args:

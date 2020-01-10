@@ -3,7 +3,7 @@ import csv, sys, argparse
 '''
 generate batch
 
-usage: python generate_sample_batch BATCH_SIZE
+usage: python3 create_test_input.py --batchsize [BATCHSIZE]
 
 '''
 def run(args=None):
@@ -11,7 +11,7 @@ def run(args=None):
 
 
 def create_batch(args=None):
-    with open ('../npi-sample-data/npi_data_dec_2019.csv', newline = '') as csv_infile, open('../npi-sample-data/npi_sample_batch.csv', 'w', newline = '') as csv_outfile_test:
+    with open ('../npi-sample-data/npi_data_dec_2019.csv', newline = '') as csv_infile, open('../sample-input-output/sample_address_input.csv', 'w', newline = '') as csv_outfile_test:
         csvReader = csv.DictReader(csv_infile, delimiter = ',')
         csvWriter = csv.writer(csv_outfile_test)
         csvWriter.writerow(["address"])
