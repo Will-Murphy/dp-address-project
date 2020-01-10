@@ -19,16 +19,8 @@ python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_c
 ## Sample input/output files: 
 see sample-input-output directory 
 
-
 ## Notes :
  - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
  - Third Party Reverse Geocoding Service: Open cage
- - Will probably desgin such that run batch can decide about stream or batch input and handle it
-    nearly identically
-
-### SMARTY STREET specific notes ###: 
- - MAX_BATCH_SIZE = 100 lookups/request
- - "freeform" input address is saved in the smarty streets 'Lookup' object in the 'street' attribute  
- -  Later use potentially address opensource lib for problem "freeform" inputs, or altogether
-
- 
+ These services are interchangable with other services so long as they fit 
+ the address service interface enforced by the the address service class
