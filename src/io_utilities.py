@@ -9,15 +9,11 @@ Input/output utilities to help address service class read and produce csv files
 def read_address_input(infile):
     with open (infile, newline = '') as csv_address_infile:
         csvReader = csv.reader(csv_address_infile, delimiter = ',')
-        try:
-            csvReader.__next__() 
-        except StopIteration:
-            print("\n Error: ensure input file not empty \n")
-            raise 
+        __check_address_input(csvReader)
         address_object_list = []
         for row in csvReader:
             address_string = str(row[0])
-            #TODO:change condition
+            #TODO:change condition based on actual input 
             if len(address_string)>10: 
                 address = Address()
                 address.input_string = address_string
@@ -27,24 +23,43 @@ def read_address_input(infile):
 def read_coordinate_input(infile): 
     with open (infile, newline = '') as csv_address_infile:
         csvReader = csv.reader(csv_address_infile, delimiter = ',')
-        try:
-            csvReader.__next__() 
-        except StopIteration:
-            print("\n Error: ensure input file not empty \n")
-            raise 
+        __check_coordinate_input(csvReader)
         address_object_list = []
         for row in csvReader:
             latitude = row[0]
             longitude = row[1]
-            #TODO:change condition
+            #TODO:change condition based on actual input
             if latitude and longitude:
                 address = Address()
                 address.latitude = latitude
                 address.longitude = longitude  
                 address_object_list.append(address)
     return address_object_list
-    
 
+# helpers to ensure correct format of input 
+def __check_address_input(csvReader):
+    try:
+        headers = csvReader.__next__() 
+        assert len(headers) == 1
+    except StopIteration:
+        print("\n Error: ensure input file not empty \n")
+        raise 
+    except AssertionError:
+        print(("\n Error: input file expected to consist of a single csv column of address strings called 'address'. \n"))
+        raise
+
+def __check_coordinate_input(csvReader):
+    try:
+        headers = csvReader.__next__() 
+        assert len(headers) == 2
+    except StopIteration:
+        print("\n Error: ensure input file not empty \n")
+        raise 
+    except AssertionError:
+        print(("\n Error: input file expected to consist of two csv columns with coordinate data as follows: 'latitude', 'longitude'. \n"))
+        raise
+
+    
 ############ Functions to write to csv output files ############# (make a class?)
 def write_forward_geocode_csv_output(processed_address_list, outfile):
     with open (outfile, 'w', newline = '') as csv_address_outfile: 
@@ -74,9 +89,7 @@ def write_reverse_geocode_csv_output(processed_address_list, outfile):
         for address in processed_address_list:
             __write_reverse_geocode_data(csvWriter, address)
    
-
 # helpers for csv writing functions 
-
 def __write_forward_geocode_header(csvWriter):
     csvWriter.writerow(['address', 'latitude', 'longitude'])
 

@@ -1,5 +1,4 @@
 class Address ():
-    #TODO: make this iterable? 
     def __init__(self):
         self.input_string = None
         self.line_1 = None 

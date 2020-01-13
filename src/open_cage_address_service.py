@@ -9,12 +9,13 @@ from opencage.geocoder import InvalidInputError, RateLimitExceededError, Unknown
 class OpenCageAddressService (AddressService):
     """
     Class represents Open Cage reverse and forward geocoding specific implementation of AddressService class. 
-
+    
+    Open cage is rate limited based on API access tier, so request response time will be variable. 
     """ 
 
-    # TODO: add number of processed addresses variable 
     def __init__(self):
-        self.client = None 
+        self.client = None
+        self.num_addresses_processed = 0 
 
 
     def load_config(self, config_file):
@@ -24,30 +25,29 @@ class OpenCageAddressService (AddressService):
         auth_key = config.get('OPEN CAGE', 'key' )
         self.client = OpenCageGeocode(auth_key)
 
+
     #TODO: stream parameters 
     def send_request(self, params,  address_data):
-        """ Responsible for sending request to service and returning processed data """
-        
+        """ Responsible for sending a request to service and returning processed data """
         # forward geocoding 
-        if int(params["options"]) == 1: 
+        if int(params["options"]) == 2: 
             address_query = u'{address_data.input_string}'
             try:
                 results = self.client.geocode(address_query)
+                print("f'{type(self).__name__} request sent. Waiting on rate limit...")
                 return results
             except RateLimitExceededError as rate_err:
                 print(rate_err)
             except InvalidInputError as invalid_err:
                 print(invalid_err)
                 raise
-
         # reverse geocoding 
         elif int(params["options"]) == 3:
             latitude = address_data.latitude
             longitude = address_data.longitude
-            print(latitude)
-            print(longitude)
             try:
-                results = self.client.reverse_geocode(latitude, longitude, language = 'de', no_annotations='1')
+                results = self.client.reverse_geocode(latitude, longitude, language = 'eng', no_annotations='1')
+                print(f'< {type(self).__name__} request sent. Waiting on rate limit... >')
                 return results
             except RateLimitExceededError as rate_err:
                 print(rate_err)
@@ -74,10 +74,13 @@ class OpenCageAddressService (AddressService):
         processed_address_list = []
         for address in address_input_data: 
             result = self.send_request(params, address)
+            self.num_addresses_processed += 1
             if result and len(result):
                 address.latitude = result[0]['geometry']['lat']
                 address.longitude = result[0]['geometry']['lng']
             processed_address_list.append(address)
+
+        print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
         
 
@@ -87,14 +90,15 @@ class OpenCageAddressService (AddressService):
         
         returns a single Address object or Address object list depending on stream or batch input.
         """
-        print(address_input_data[0].latitude)
-        print(address_input_data[0].longitude)
         processed_address_list = []
         for address in address_input_data: 
             result = self.send_request(params, address)
+            self.num_addresses_processed += 1
             if result and len(result):
                 address.line_1 = result[0]['formatted']
             processed_address_list.append(address)
+
+        print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
         
      

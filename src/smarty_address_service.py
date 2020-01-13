@@ -8,16 +8,19 @@ from smartystreets_python_sdk.us_street import Lookup
 
 class SmartyAddressService (AddressService):
     """
-    Class represents smarty Streets US_STREETS_API Specific implementation of AddressService class. 
+    Class represents Smarty Streets US_STREETS_API validatation and forward geocoding specific implementation AddressService class
 
-    It implements that abstract class with helper methods that deal with its specific API implmentation
+    It implements that abstract class with helper methods that deal with its specific API implmentation.
     """
 
     MAX_ADDRESSES_PER_REQUEST = 100 
 
-    # TODO: add number of processed addresses variable 
     def __init__(self):
         self.client = None 
+        self.num_addresses_processed = 0
+        self.__total_addresses_in_request_list = 0
+        self.__is_address_list_processed = False
+
 
 
     def load_config(self, config_file):
@@ -30,7 +33,7 @@ class SmartyAddressService (AddressService):
         self.client = ClientBuilder(api_credentials).build_us_street_api_client()
 
 
-    #TODO: clarify naming in this function, add parameters for stream logic
+    #TODO: add parameters for stream logic
     def send_request(self, params, address_data):
         """ Responsible for sending request to service and returning processed data """
         try:
@@ -48,11 +51,14 @@ class SmartyAddressService (AddressService):
         returns a single Address object or Address object list depending on stream or batch input.
         """
         processed_address_list = []
-        if self.__is_address_list_processed(address_input_data):
+        # avoid redundancy for combined 'forward geocode and validate' option from main becuase smarty does them in both in one step 
+        if self.__is_address_list_processed:
             processed_address_list = address_input_data
         else:
-            request_list = self.__prepare_smarty_requests_list(address_input_data)
-            processed_address_list = self.__smarty_process_address_input_data(request_list,address_input_data )
+            request_list = self.__prepare_smarty_request_list(address_input_data)
+            processed_address_list = self.__process_smarty_request_list(request_list,address_input_data )
+            self.__is_address_list_processed = True
+            print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
 
 
@@ -63,11 +69,14 @@ class SmartyAddressService (AddressService):
         returns a single Address object or Address object list depending on stream or batch input.
         """
         processed_address_list = []
-        if self.__is_address_list_processed(address_input_data):
+        # avoid redundancy for combined 'forward geocode and validate' option from main becuase smarty does them in both in one step 
+        if self.__is_address_list_processed:
             processed_address_list = address_input_data
         else:
-            request_list = self.__prepare_smarty_requests_list(address_input_data)
-            processed_address_list = self.__smarty_process_address_input_data(request_list,address_input_data )
+            request_list = self.__prepare_smarty_request_list(address_input_data)
+            processed_address_list = self.__process_smarty_request_list(request_list,address_input_data )
+            self.__is_address_list_processed = True
+            print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
     
 
@@ -80,22 +89,9 @@ class SmartyAddressService (AddressService):
 
     
     ########### Smarty Batch Processing Helpers ###########
-    def __is_address_list_processed(self, address_list):
-        """
-        Checks if address list has already been processed
-         
-        Used to avoid processing list twice, since smarty streets geocodes and validates in 
-        the same request.  add note for logic 
-        """
-        # TODO: make this condition more robust
-        if address_list[0].is_valid is None:
-            return False
-        else: 
-            return True
-    
 
     #TODO: add parameters for stream
-    def __prepare_smarty_requests_list(self,  address_list):
+    def __prepare_smarty_request_list(self, address_list):
         """
         Returns a list of requests each containing SmartyAddressService.MAX_ADDRESSES_PER_REQUEST
         address input strings.
@@ -113,22 +109,27 @@ class SmartyAddressService (AddressService):
                 single_request_batch_partition = Batch()
                 addresses_per_request = 0
             single_request_batch_partition.add(Lookup(address.input_string))
+            self.__total_addresses_in_request_list += 1
             addresses_per_request+=1
+            
 
         if addresses_per_request>0:
             request_list.append(single_request_batch_partition)
         return request_list
 
-        
-    def __smarty_process_address_input_data(self,request_list, address_input_data ):
+    
+    # TODO: python boolean or string for is_valid parameter
+    def __process_smarty_request_list(self,request_list, address_input_data ):
         """
-        Process address input data contained in request list through smarty streets api
+        Process address input data contained in request list through smarty streets API
 
 
         Each individual request contains SmartyAddressService.MAX_ADDRESSES_PER_REQUEST address Lookups,
         which are assigned candidate addresses by their api. This function chooses the top candidate is chosen 
         and assigns desired fields to our address objects. If no candidates are found, the address is invalid. 
         """
+        assert(len(address_input_data) == self.__total_addresses_in_request_list)
+
         address_iterator = iter(address_input_data)
         processed_address_list = []
         for unprocessed_request in request_list: 
@@ -146,6 +147,7 @@ class SmartyAddressService (AddressService):
                     address.line_1 = candidates[0].delivery_line_1
                     address.line_2 = candidates[0].last_line
                     address.is_valid = True
+                self.num_addresses_processed+=1
                 processed_address_list.append(address)    
         return processed_address_list 
 
