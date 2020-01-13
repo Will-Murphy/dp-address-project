@@ -22,7 +22,6 @@ class SmartyAddressService (AddressService):
         self.__is_address_list_processed = False
 
 
-
     def load_config(self, config_file):
         """ Resonsible for loading configs and setting up client """
         config = configparser.ConfigParser()
@@ -88,8 +87,7 @@ class SmartyAddressService (AddressService):
 
 
     
-    ########### Smarty Batch Processing Helpers ###########
-
+    ############ Smarty Batch Processing Helpers ############
     #TODO: add parameters for stream
     def __prepare_smarty_request_list(self, address_list):
         """
@@ -112,7 +110,6 @@ class SmartyAddressService (AddressService):
             self.__total_addresses_in_request_list += 1
             addresses_per_request+=1
             
-
         if addresses_per_request>0:
             request_list.append(single_request_batch_partition)
         return request_list
@@ -122,7 +119,6 @@ class SmartyAddressService (AddressService):
     def __process_smarty_request_list(self,request_list, address_input_data ):
         """
         Process address input data contained in request list through smarty streets API
-
 
         Each individual request contains SmartyAddressService.MAX_ADDRESSES_PER_REQUEST address Lookups,
         which are assigned candidate addresses by their api. This function chooses the top candidate is chosen 
@@ -148,7 +144,8 @@ class SmartyAddressService (AddressService):
                     address.line_2 = candidates[0].last_line
                     address.is_valid = True
                 self.num_addresses_processed+=1
-                processed_address_list.append(address)    
+                processed_address_list.append(address)  
+
         return processed_address_list 
 
       

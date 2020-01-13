@@ -17,7 +17,6 @@ class AddressService (ABC):
         """ Resonsible for loading configs and setting up client """
         pass
 
-    
    
     @abstractmethod
     def send_request(self, params:dict,  data):

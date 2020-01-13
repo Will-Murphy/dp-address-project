@@ -20,6 +20,7 @@ def read_address_input(infile):
                 address_object_list.append(address)   
     return address_object_list
 
+
 def read_coordinate_input(infile): 
     with open (infile, newline = '') as csv_address_infile:
         csvReader = csv.reader(csv_address_infile, delimiter = ',')
@@ -36,6 +37,7 @@ def read_coordinate_input(infile):
                 address_object_list.append(address)
     return address_object_list
 
+
 # helpers to ensure correct format of input 
 def __check_address_input(csvReader):
     try:
@@ -48,6 +50,7 @@ def __check_address_input(csvReader):
         print(("\n Error: input file expected to consist of a single csv column of address strings called 'address'. \n"))
         raise
 
+
 def __check_coordinate_input(csvReader):
     try:
         headers = csvReader.__next__() 
@@ -59,6 +62,7 @@ def __check_coordinate_input(csvReader):
         print(("\n Error: input file expected to consist of two csv columns with coordinate data as follows: 'latitude', 'longitude'. \n"))
         raise
 
+
     
 ############ Functions to write to csv output files ############# (make a class?)
 def write_forward_geocode_csv_output(processed_address_list, outfile):
@@ -67,13 +71,15 @@ def write_forward_geocode_csv_output(processed_address_list, outfile):
         __write_forward_geocode_header(csvWriter)
         for address in processed_address_list:
             __write_forward_geocode_data(csvWriter, address)
-   
+
+
 def write_validation_csv_output(processed_address_list, outfile): 
     with open (outfile, 'w', newline = '') as csv_address_outfile: 
         csvWriter = csv.writer(csv_address_outfile, delimiter = ',')
         __write_validation_header(csvWriter)
         for address in processed_address_list:
             __write_validation_data(csvWriter, address)
+
 
 def write_general_csv_output(processed_address_list, outfile): 
    with open (outfile, 'w', newline = '') as csv_address_outfile: 
@@ -82,13 +88,15 @@ def write_general_csv_output(processed_address_list, outfile):
         for address in processed_address_list:
             __write_general_data(csvWriter, address)
 
+
 def write_reverse_geocode_csv_output(processed_address_list, outfile):
     with open (outfile, 'w', newline = '') as csv_address_outfile: 
         csvWriter = csv.writer(csv_address_outfile, delimiter = ',')
         __write_reverse_geocode_header(csvWriter)
         for address in processed_address_list:
             __write_reverse_geocode_data(csvWriter, address)
-   
+
+
 # helpers for csv writing functions 
 def __write_forward_geocode_header(csvWriter):
     csvWriter.writerow(['address', 'latitude', 'longitude'])
@@ -117,6 +125,7 @@ def __write_general_data(csvWriter, address):
                         f'{str(address.line_1)}, {str(address.line_2)}',
                         address.latitude,
                         address.longitude ])
+
 
 def __write_reverse_geocode_header(csvWriter):
     csvWriter.writerow(['latitude', 'longitude', 'address'])

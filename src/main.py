@@ -21,7 +21,6 @@ def run(args=None):
         run_one(args=args)
          
 
- 
 # TODO: implement this method
 def run_one(args=None):
     pass
@@ -49,7 +48,6 @@ def run_batch(args=None):
         io_utilities.write_validation_csv_output(processed_address_list, args['outfile'] )
 
     elif int(args['options']) == 2:
-
         print(f'< using {type(address_service).__name__} for forward geocoding >')
         input_address_list = io_utilities.read_address_input(args["infile"])
         processed_address_list = address_service.forward_geocode(args, input_address_list)
@@ -64,6 +62,7 @@ def run_batch(args=None):
     else: 
         print("options parameter takes number 0-3")
     
+
 
 if __name__ == '__main__':
     # Define available arguments
