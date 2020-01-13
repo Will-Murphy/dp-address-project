@@ -1,11 +1,11 @@
 import configparser
 
-from address_service import AddressService
-from address import Address
-
 from smartystreets_python_sdk import StaticCredentials, exceptions, Batch, ClientBuilder
 from smartystreets_python_sdk.us_street import Lookup
 
+from ..models.address import Address
+from ..models.address_service import AddressService
+ 
 class SmartyAddressService (AddressService):
     """
     Class represents Smarty Streets US_STREETS_API validatation and forward geocoding specific implementation AddressService class

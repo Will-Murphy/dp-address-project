@@ -1,8 +1,10 @@
 import csv 
-from address import Address
+
+from ..models.address import Address
+
 
 """
-Input/output utilities to help address service class read and produce csv files
+Input/output utilities to help address service class read and produce csv files 
 """
 
 ############ Functions to read from csv input files ############# (make a class?)
@@ -42,7 +44,7 @@ def read_coordinate_input(infile):
 def __check_address_input(csvReader):
     try:
         headers = csvReader.__next__() 
-        assert len(headers) == 1, "input must consist of address csv with one column of strings: 'address' "
+        assert len(headers) == 1, "input must consist of address csv with one column called 'address' "
     except StopIteration:
         print("\n Error: ensure input file not empty \n")
         raise 

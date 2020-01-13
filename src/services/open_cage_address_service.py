@@ -1,11 +1,11 @@
 import configparser
 
-from address_service import AddressService
-from address import Address
-
 from opencage.geocoder import OpenCageGeocode
 from opencage.geocoder import InvalidInputError, RateLimitExceededError, UnknownError
 
+from ..models.address import Address
+from ..models.address_service import AddressService
+ 
 class OpenCageAddressService (AddressService):
     """
     Class represents Open Cage reverse and forward geocoding specific implementation of AddressService class. 
