@@ -1,5 +1,11 @@
 #  DP-Address-Project 
-this project was done for Decision Point Healthcare Solutions : https://decisionpointhealth.com 
+This project was done for Decision Point Healthcare Solutions: https://decisionpointhealth.com 
+
+### Notes :
+ - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
+ - Third Party Reverse Geocoding Service: Open cage geocoding 
+ - These third party services are interchangable with other services so long as they adhere to sturcture 
+   defined by address service abstract class ( see address_service.py )
 
 ## Sample usage :
 
@@ -19,8 +25,8 @@ python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_c
 ## Sample input/output files: 
 see sample-input-output directory 
 
-## Notes :
- - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
- - Third Party Reverse Geocoding Service: Open cage
- These services are interchangable with other services so long as they fit 
- the address service interface enforced by the the address service class
+## Dependencies/ Setup 
+ External depencies needed are for the third party python sdk's used in the 
+ service specific implmementation of address classes
+ - Smarty streets: pip3 install smartystreets_python_sdk (https://github.com/smartystreets/smartystreets-python-sdk)
+ - Open Cage: pip3 install opencage (https://opencagedata.com/tutorials/geocode-in-python)
