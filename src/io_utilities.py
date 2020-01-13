@@ -42,24 +42,21 @@ def read_coordinate_input(infile):
 def __check_address_input(csvReader):
     try:
         headers = csvReader.__next__() 
-        assert len(headers) == 1
+        assert len(headers) == 1, "input must consist of address csv with one column of strings: 'address' "
     except StopIteration:
         print("\n Error: ensure input file not empty \n")
         raise 
     except AssertionError:
-        print(("\n Error: input file expected to consist of a single csv column of address strings called 'address'. \n"))
         raise
-
 
 def __check_coordinate_input(csvReader):
     try:
         headers = csvReader.__next__() 
-        assert len(headers) == 2
+        assert len(headers) == 2, "input must be csv with two columns of coordinates: 'latitude', 'longitude' "
     except StopIteration:
         print("\n Error: ensure input file not empty \n")
         raise 
     except AssertionError:
-        print(("\n Error: input file expected to consist of two csv columns with coordinate data as follows: 'latitude', 'longitude'. \n"))
         raise
 
 
