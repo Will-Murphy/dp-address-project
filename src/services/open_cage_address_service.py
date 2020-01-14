@@ -26,7 +26,6 @@ class OpenCageAddressService (AddressService):
         self.client = OpenCageGeocode(auth_key)
 
 
-    #TODO: stream parameters 
     def send_request(self, params,  address_data):
         """ Responsible for sending a request to service and returning processed data """
         # forward geocoding 
@@ -60,7 +59,7 @@ class OpenCageAddressService (AddressService):
         """ 
         Reponsible for validating input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         raise NotImplementedError(f'{type(self).__name__} does not provide this service')
         
@@ -69,7 +68,7 @@ class OpenCageAddressService (AddressService):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         processed_address_list = []
         for address in address_input_data: 
@@ -88,7 +87,7 @@ class OpenCageAddressService (AddressService):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         processed_address_list = []
         for address in address_input_data: 

@@ -2,7 +2,6 @@ import csv
 
 from ..models.address import Address
 
-
 """
 Input/output utilities to help address service class read and produce csv files 
 """

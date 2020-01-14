@@ -1,11 +1,12 @@
 import configparser
 
+#TODO: alias these objects with names that make more sense. 
 from smartystreets_python_sdk import StaticCredentials, exceptions, Batch, ClientBuilder
 from smartystreets_python_sdk.us_street import Lookup
 
 from ..models.address import Address
 from ..models.address_service import AddressService
- 
+
 class SmartyAddressService (AddressService):
     """
     Class represents Smarty Streets US_STREETS_API validatation and forward geocoding specific implementation AddressService class
@@ -32,10 +33,10 @@ class SmartyAddressService (AddressService):
         self.client = ClientBuilder(api_credentials).build_us_street_api_client()
 
 
-    #TODO: add parameters for stream logic
     def send_request(self, params, address_data):
         """ Responsible for sending request to service and returning processed data """
         try:
+            # Stream considered a batch of one
             self.client.send_batch(address_data)
             return address_data
         except exceptions.SmartyException as err:
@@ -47,10 +48,10 @@ class SmartyAddressService (AddressService):
         """ 
         Reponsible for validating input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         processed_address_list = []
-        # avoid redundancy for combined 'forward geocode and validate' option from main becuase smarty does them in both in one step 
+        # check avoids redundancy for combined 'forward geocode and validate' as API does both by default
         if self.__is_address_list_processed:
             processed_address_list = address_input_data
         else:
@@ -65,30 +66,29 @@ class SmartyAddressService (AddressService):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
+
         processed_address_list = []
-        # avoid redundancy for combined 'forward geocode and validate' option from main becuase smarty does them in both in one step 
+        # check avoids redundancy for combined 'forward geocode and validate' as API does both by default
         if self.__is_address_list_processed:
             processed_address_list = address_input_data
         else:
             request_list = self.__prepare_smarty_request_list(address_input_data)
-            processed_address_list = self.__process_smarty_request_list(request_list,address_input_data )
+            processed_address_list = self.__process_smarty_request_list(request_list, address_input_data )
             self.__is_address_list_processed = True
             print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
-    
+        
 
     def reverse_geocode(self, params, coordinate_input_data):
         """ 
         Smarty Streets API does not support reverse geocoding
         """
         raise NotImplementedError(f'{type(self).__name__} does not provide this service')
-
-
     
-    ############ Smarty Batch Processing Helpers ############
-    #TODO: add parameters for stream
+
+    ############ Smarty Processing Helpers ############
     def __prepare_smarty_request_list(self, address_list):
         """
         Returns a list of requests each containing SmartyAddressService.MAX_ADDRESSES_PER_REQUEST
@@ -115,8 +115,8 @@ class SmartyAddressService (AddressService):
         return request_list
 
     
-    # TODO: python boolean or string for is_valid parameter
-    def __process_smarty_request_list(self,request_list, address_input_data ):
+    # TODO: python boolean or string for is_valid parameter?
+    def __process_smarty_request_list(self, request_list, address_input_data ):
         """
         Process address input data contained in request list through smarty streets API
 
@@ -126,11 +126,11 @@ class SmartyAddressService (AddressService):
         """
         assert(len(address_input_data) == self.__total_addresses_in_request_list)
 
-        address_iterator = iter(address_input_data)
         processed_address_list = []
+        address_iterator = iter(address_input_data)
         for unprocessed_request in request_list: 
-            request_params = {}
-            processed_request = self.send_request(request_params, unprocessed_request)
+            params = {}
+            processed_request = self.send_request(params, unprocessed_request)
             for lookup in processed_request:
                 candidates = lookup.result
                 address = next(address_iterator)
@@ -145,9 +145,12 @@ class SmartyAddressService (AddressService):
                     address.is_valid = True
                 self.num_addresses_processed+=1
                 processed_address_list.append(address)  
-
         return processed_address_list 
+            
 
+            
+
+         
       
 
 

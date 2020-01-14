@@ -5,15 +5,20 @@ from .services.open_cage_address_service import OpenCageAddressService
 from .services.smarty_address_service import SmartyAddressService
 from .utilities import stream_io
 
-#TODO: fix file structure/import statements, implement stream 
+#TODO: fix file structure/import statement
         
-'''
+"""
+Entry point for stream processing of addresses 
+
 # Sample usage
-from dp-provider-address-folder 
+from dp-provider-address-folder:
 
-python3 -m src.stream_main --config config.cfg --input "100 Washington St, Canton MA, 02021"  --options 0
+    python3 -m src.stream_main --config config.cfg --input "2 Oliver St, Boston MA"  --options 0
 
-'''
+or reverse gorcoding:
+
+    python3 -m src.stream_main --config config.cfg --input "-71.15064, 42.14055"  --options 3
+"""
 
 def run(args=None):
 
@@ -25,33 +30,40 @@ def run(args=None):
 
     if int(args['options']) == 0:
         print(f'< using {type(address_service).__name__} for address validation and forward geocoding >')
-        input_address_string = stream_io.read_address_input(args["infile"])
-        validated_address_list = address_service.validate(args, input_address_list)
-        processed_address_list = address_service.forward_geocode(args, validated_address_list)
-        stream_io.write_general_csv_output(processed_address_list, args['outfile'] )
+        input_address = stream_io.read_address_input(args["input"])
+        validated_address = address_service.validate(args, input_address)
+        processed_address = address_service.forward_geocode(args, validated_address)
+        output_string = stream_io.construct_geocode_and_validiation_output(processed_address )
+        print(output_string)
+        return output_string
     
     elif int(args['options']) == 1:
         print(f'< using {type(address_service).__name__} for address validation >')
-        input_address_list = stream_io.read_address_input(args["infile"])
-        processed_address_list = address_service.validate(args, input_address_list)
-        stream_io.write_validation_csv_output(processed_address_list, args['outfile'] )
-
+        input_address = stream_io.read_address_input(args["input"])
+        processed_address = address_service.validate(args, input_address)
+        output_string = stream_io.construct_validation_output(processed_address )
+        print(output_string)
+        return output_string
+        
     elif int(args['options']) == 2:
         print(f'< using {type(address_service).__name__} for forward geocoding >')
-        input_address_list = stream_io.read_address_input(args["infile"])
-        processed_address_list = address_service.forward_geocode(args, input_address_list)
-        stream_io.write_forward_geocode_csv_output(processed_address_list, args['outfile'] )
+        input_address = stream_io.read_address_input(args["input"])
+        processed_address = address_service.forward_geocode(args, input_address)
+        output_string = stream_io.construct_foward_geocode_output(processed_address )
+        print(output_string)
+        return output_string
 
     elif int(args['options']) == 3:
         print(f'< using {type(address_service_2).__name__} for reverse geocoding >')
-        input_coordinate_list = stream_io.read_coordinate_input(args["infile"])
-        processed_address_list = address_service_2.reverse_geocode(args, input_coordinate_list)
-        stream_io.write_reverse_geocode_csv_output(processed_address_list, args['outfile'] )
+        input_coordinate_list = stream_io.read_coordinate_input(args["input"])
+        processed_address = address_service_2.reverse_geocode(args, input_coordinate_list)
+        output_string = stream_io.construct_reverse_geocode_output(processed_address )
+        output_string = print(output_string)
+        return output_string
 
     else: 
         print("options parameter takes number 0-3")
     
-
 
 if __name__ == '__main__':
     # Define available arguments
@@ -66,7 +78,6 @@ if __name__ == '__main__':
     
     # Get variables from the arguments
     args = vars(arg_parser.parse_args(sys.argv[1:]))
-    args["batch"] = False
     
     print(f'args: {args}')
  

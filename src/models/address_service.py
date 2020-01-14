@@ -29,7 +29,7 @@ class AddressService (ABC):
         """ 
         Reponsible for validating input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         pass 
     
@@ -39,7 +39,7 @@ class AddressService (ABC):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         pass 
 
@@ -48,7 +48,7 @@ class AddressService (ABC):
         """ 
         Reponsible for reverse geocoding input addresses in stream or batch form.
         
-        returns a single Address object or Address object list depending on stream or batch input.
+        returns a list containing a single Address object for stream input and multiple for batch input.
         """
         pass
     

@@ -7,13 +7,14 @@ from .utilities import batch_io
 
 #TODO: fix file structure/import statements
         
-'''
+"""
+Entry point for batch processing of addresses 
+
 # Sample usage from dp-provider-address folder 
 
 python3 -m src.batch_main --config config.cfg --infile 'sample-input-output/sample_coordinate_input.csv' 
 --outfile 'sample-input-output/out.csv' --options 3
-
-'''
+"""
 
 def run(args=None):
 
@@ -68,7 +69,6 @@ if __name__ == '__main__':
      
     # Get variables from the arguments
     args = vars(arg_parser.parse_args(sys.argv[1:]))
-    args["batch"] = True
     
     print(f'args: {args}')
  
