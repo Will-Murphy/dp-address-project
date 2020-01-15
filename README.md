@@ -10,13 +10,13 @@ services and to process that data for validation, standardization and geocoding.
    - Third Party Reverse Geocoding Service: OpenCageData (https://opencagedata.com)
 
    **Implementation details**
-   - These third party services are interchangable with other services so long as their implementations (**src/services**) reside
-      in classes that inherit from the *AddressService* abstract class (see **src/models/address_service.py**) e.g. 
+   - These third party services are interchangable with other services so long as their implementations (**src/services/...**) reside
+      in classes that inherit from the *AddressService* abstract class (**src/models/address_service.py**) e.g. 
       *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
       from *AddressService*
    - All data processing done inside these third party implementations of *AddressService* classes is done terms of the *Address* 
-     objects (see **src/models/Address.py**)
-   - All input/output and formatting is handled by **utilities/stream_io.py** and **utilities/batch_io.py**
+     objects (**src/models/Address.py**)
+   - All input/output and formatting is handled by utililites(**src/utilities/..**)
    
 
 
