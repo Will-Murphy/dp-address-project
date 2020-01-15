@@ -2,27 +2,33 @@
 This project was done for Decision Point Healthcare Solutions: https://decisionpointhealth.com 
 
 This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
-services to process that data for validation, standardization and geocoding. It then produces processed output data which matching the form of the input. 
+services and to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
 
-### Notes :
- - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
- - Third Party Reverse Geocoding Service: Open cage geocoding 
- - These third party services are interchangable with other services so long as they adhere to sturcture 
-   defined by address service abstract class ( see address_service.py ) e.g. 
-   smarty streets does all but reverse geocoding, which opencage handles. 
+#### Notes: ####
+   **Third Party Services**
+ - Third Party Forward GeoCoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
+ - Third Party Reverse Geocoding Service: OpenCageData (https://opencagedata.com)
+
+   **Implementation details**
+ - These third party services are interchangable with other services so long as their implementations reside
+   in classes that inherit from the *AddressService* abstract class ( see **src/models/address_service.py** ) e.g. 
+   *SmartStreetsAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
+   from *AddressService*
+ - All data processing done inside these implementatioms of *AddressService* classes is done terms of the *Address* objects. 
+ - All input/output processing is handled by utility classes (**utilities/stream_io.py** or **utilities/batch_io.py**)
+   
 
 
 ## Setup and Usage:
 
-### Setup 
+### Setup and Requirements
 - python 3.6 or higher required 
 
-- Dependencies from third party services 
-    Smarty Streets: ```pip3 install smartystreets_python_sdk```
-    more info: (https://github.com/smartystreets/smartystreets-python-sdk)
+- Smarty Streets official sdk: ```pip3 install smartystreets_python_sdk```
+  - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-    OpenCage: ```pip3 install opencage```
-    more info: (https://opencagedata.com/tutorials/geocode-in-python)
+- OpenCage official sdk: ```pip3 install opencage```
+  - more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
 - Go to Services website for API keys and fill them in the sample_config.cfg file 
     - For Smarty Streets : 
@@ -50,35 +56,35 @@ first cd into directory: **dp-provider-address/src/**
 #### For Batch CSV Input: 
 Running the following example commands should work as is if set up above is completed correctly,
 resulting in sample output to '/dp-provider-address/sample-input-output/out.csv' based on the 
-sample input file and options selected. arguments:
+sample input file and options selected. **program arguments**:
 -  ```--config```  configuration file (see sample_config.cfg)
 -  ```--infile```  input csv batch file (see sample_inputs)
 -  ```--outfile``` output csv batch file to direct output to
 -  ```--options``` options for processing input data (see below)
 
       
-  ##### Batch Address Validation and Forward Geocoding: option 0 #####
-  ```  
-  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
-  ```
-  ##### Batch Address Validation Only: option 1 #####
-  ```
-  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out' --options 1
-  ```
-  ##### Batch Forward Geocoding Only: option 2 #####
-  ```
-  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
-  ```
-  ##### Batch Reverse Geocoding: option 3 #####
-  ```
-  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
-  ```
+   ##### Batch Address Validation and Forward Geocoding: option 0 #####
+   ```  
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
+   ```
+   ##### Batch Address Validation Only: option 1 #####
+   ```
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../ sample-input-output/out' --options 1
+   ```
+   ##### Batch Forward Geocoding Only: option 2 #####
+   ```
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
+   ```
+   ##### Batch Reverse Geocoding: option 3 #####
+   ```
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../ sample-input-output/out.csv' --options 3
+   ```
 
 #### For Single String Stream Input: 
 Running the following example commands should work as is and will both return and print the string results 
-for the given input. arguments:
+for given input. **program arguments**:
 -  ```--config```  configuration file (see sample_config.cfg)
--  ```--infile```  input string 
+-  ```--input```  input string containing address or comma separated coordinates
 -  ```--options``` options for processing input (see below)
   
    ##### Stream Address Validation and Forward Geocoding: option 0 #####
@@ -98,8 +104,8 @@ for the given input. arguments:
    python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 3
    ```
 
-## Sample input/output files: 
-see sample-input-output directory 
+## Sample input/output files for batch processing: 
+see **sample-input-output** directory 
 
 
  
