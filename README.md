@@ -11,11 +11,12 @@ services and to process that data for validation, standardization and geocoding.
 
    **Implementation details**
    - These third party services are interchangable with other services so long as their implementations reside
-      in classes that inherit from the *AddressService* abstract class ( see **src/models/address_service.py** ) e.g. 
+      in classes that inherit from the *AddressService* abstract class (see **src/models/address_service.py**) e.g. 
       *SmartStreetsAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
       from *AddressService*
-   - All data processing done inside these implementatioms of *AddressService* classes is done terms of the *Address* objects. 
-   - All input/output processing is handled by utility classes (**utilities/stream_io.py** or **utilities/batch_io.py**)
+   - All data processing done inside these third party implementations of *AddressService* classes is done terms of the *Address* 
+     objects (see **src/models/Address.py)
+   - All input/output processing is handled by utility classes ( see **utilities/stream_io.py** and **utilities/batch_io.py**)
    
 
 
