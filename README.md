@@ -3,7 +3,6 @@ This project was done for Decision Point Healthcare Solutions: https://decisionp
 
 This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
 services to process that data for validation, standardization and geocoding. It then produces processed output data which matching the form of the input. 
-A different third party API may provide any depending on how the progmam is set up so long as an address service class for that service is set up . 
 
 ### Notes :
  - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
@@ -25,7 +24,7 @@ A different third party API may provide any depending on how the progmam is set 
     OpenCage: pip3 install opencage
     more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
-- Go to Services website for API keys and fill them in a sample_config.cfg file 
+- Go to Services website for API keys and fill them in the sample_config.cfg file 
     - For Smarty Streets : 
       1. go to https://smartystreets.com/pricing and choose the free
          option with 250 lookups per month (wow!). 
@@ -47,39 +46,48 @@ A different third party API may provide any depending on how the progmam is set 
 ### Program Usage
 first cd into directory: dp-provider-address/src
    
-#### For Batch Input: 
+#### For Batch CSV Input: 
 Running the following example commands should work as is and output csv files to
 '/dp-provider-address/sample-input-output/out.csv' if set up above is completed correctly.
       
-  ##### For Address Validation and Forward Geocoding #####
+  ##### Batch Address Validation and Forward Geocoding #####
+  ```  
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
-  
-  ##### For Address Validation Only #####
+  ```
+  ##### Batch Address Validation Only #####
+  ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out' --options 1
-
-  ##### For Forward Geocoding Only #####
+  ```
+  ##### Batch Forward Geocoding Only #####
+  ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
-
-  ##### For Reverse Geocoding #####
+  ```
+  ##### Batch Reverse Geocoding #####
+  ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
+  ```
 
-#### For Stream Input: 
+#### For Single String Stream Input: 
 Running the following example commands should work as is and will both return and print the string results 
 for the given input. 
   
-  ##### For Address Validation and Forward Geocoding #####
-  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 0
-
-  ##### For Address Validation Only #####
-  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 1
-
-  ##### For Address Forward Geocoding Only #####
-  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 2
-
-  ##### For Address Reverse Geocoding Only #####
-  python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 2
-
-
+   ##### Stream Address Validation and Forward Geocoding #####
+   ```
+   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 0
+   ```
+   ##### Stream Address Validation Only #####
+   ```
+   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 1
+   ```
+   ##### Stream Address Forward Geocoding Only #####
+   ```
+   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 2
+   ```
+   ##### Stream Address Reverse Geocoding Only #####
+   ```
+   python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 3
+   ```
+   
 ## Sample input/output files: 
 see sample-input-output directory 
 
