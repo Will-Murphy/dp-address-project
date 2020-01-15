@@ -1,22 +1,22 @@
 #  DP-Address-Project 
-This project was done for Decision Point Healthcare Solutions: https://decisionpointhealth.com 
+*This project was done for Decision Point Healthcare Solutions:* https://decisionpointhealth.com 
 
 This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
 services and to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
 
-#### Notes: ####
-   **Third Party Services**
+### Notes: ###
+   **Third Party Services Used**
    - Third Party Forward GeoCoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
    - Third Party Reverse Geocoding Service: OpenCageData (https://opencagedata.com)
 
    **Implementation details**
-   - These third party services are interchangable with other services so long as their implementations reside
+   - These third party services are interchangable with other services so long as their implementations (**src/services**) reside
       in classes that inherit from the *AddressService* abstract class (see **src/models/address_service.py**) e.g. 
-      *SmartStreetsAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
+      *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
       from *AddressService*
    - All data processing done inside these third party implementations of *AddressService* classes is done terms of the *Address* 
-     objects (see **src/models/Address.py)
-   - All input/output processing is handled by utility classes ( see **utilities/stream_io.py** and **utilities/batch_io.py**)
+     objects (see **src/models/Address.py**)
+   - All input/output and formatting is handled by **utilities/stream_io.py** and **utilities/batch_io.py**
    
 
 
@@ -25,33 +25,33 @@ services and to process that data for validation, standardization and geocoding.
 ### Setup and Requirements
 - python 3.6 or higher required 
 
-- Smarty Streets official sdk: ```pip3 install smartystreets_python_sdk```
+- Smarty Streets official python sdk: ```pip3 install smartystreets_python_sdk```
   - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-- OpenCage official sdk: ```pip3 install opencage```
+- OpenCage official recommended python sdk: ```pip3 install opencage```
   - more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
-- Go to Services website for API keys and fill them in the sample_config.cfg file 
+- Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
     - For Smarty Streets : 
       1. go to https://smartystreets.com/pricing and choose the free
          option with 250 lookups per month (wow!). 
       2. Make an account (no account verification needed)
       3. Go to the account management dashboard and API keys section to get 
          your Auth ID and Auth Token 
-      4. Fill in your auth_id and auth_token (under those names) in the sample_config.cfg 
+      4. Fill in your auth_id and auth_token (under those names) in the **sample_config.cfg**
          file in under the smarty streets header
     - For Open Cage: 
       1. go to https://opencagedata.com/pricing and choose the free option limited to 
          2,500 req/day and 1 req/sec  
       2. Make an account and verfiy by email 
       3. Get your API key by email after having an acct. 
-      4. put it in the auth_key section of sample_config.cfg under the 
+      4. put it in the auth_key section of **sample_config.cfg** under the 
          open cage header 
       
 
 
 ### Program Usage
-first cd into directory: **dp-provider-address/src/** 
+first cd into src directory: **dp-provider-address/src/** 
 
    
 #### For Batch CSV Input: 
@@ -106,7 +106,7 @@ for given input. **program arguments**:
    ```
 
 ## Sample input/output files for batch processing: 
-see **sample-input-output** directory 
+see **sample-input-output** directory for sample csv files
 
 
  
