@@ -18,10 +18,10 @@ services to process that data for validation, standardization and geocoding. It 
 - python 3.6 or higher required 
 
 - Dependencies from third party services 
-    Smarty Streets: pip3 install smartystreets_python_sdk
+    Smarty Streets: ```pip3 install smartystreets_python_sdk```
     more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-    OpenCage: pip3 install opencage
+    OpenCage: ```pip3 install opencage```
     more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
 - Go to Services website for API keys and fill them in the sample_config.cfg file 
@@ -44,50 +44,60 @@ services to process that data for validation, standardization and geocoding. It 
 
 
 ### Program Usage
-first cd into directory: dp-provider-address/src
+first cd into directory: **dp-provider-address/src/** 
+
    
 #### For Batch CSV Input: 
-Running the following example commands should work as is and output csv files to
-'/dp-provider-address/sample-input-output/out.csv' if set up above is completed correctly.
+Running the following example commands should work as is if set up above is completed correctly,
+resulting in sample output to '/dp-provider-address/sample-input-output/out.csv' based on the 
+sample input file and options selected. arguments:
+-  ```--config```  configuration file (see sample_config.cfg)
+-  ```--infile```  input csv batch file (see sample_inputs)
+-  ```--outfile``` output csv batch file to direct output to
+-  ```--options``` options for processing input data (see below)
+
       
-  ##### Batch Address Validation and Forward Geocoding #####
+  ##### Batch Address Validation and Forward Geocoding: option 0 #####
   ```  
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
   ```
-  ##### Batch Address Validation Only #####
+  ##### Batch Address Validation Only: option 1 #####
   ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out' --options 1
   ```
-  ##### Batch Forward Geocoding Only #####
+  ##### Batch Forward Geocoding Only: option 2 #####
   ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
   ```
-  ##### Batch Reverse Geocoding #####
+  ##### Batch Reverse Geocoding: option 3 #####
   ```
   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
   ```
 
 #### For Single String Stream Input: 
 Running the following example commands should work as is and will both return and print the string results 
-for the given input. 
+for the given input. arguments:
+-  ```--config```  configuration file (see sample_config.cfg)
+-  ```--infile```  input string 
+-  ```--options``` options for processing input (see below)
   
-   ##### Stream Address Validation and Forward Geocoding #####
+   ##### Stream Address Validation and Forward Geocoding: option 0 #####
    ```
    python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 0
    ```
-   ##### Stream Address Validation Only #####
+   ##### Stream Address Validation Only: option 1 #####
    ```
    python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 1
    ```
-   ##### Stream Address Forward Geocoding Only #####
+   ##### Stream Address Forward Geocoding Only: option 2 #####
    ```
    python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 2
    ```
-   ##### Stream Address Reverse Geocoding Only #####
+   ##### Stream Address Reverse Geocoding Only: option 3 #####
    ```
    python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 3
    ```
-   
+
 ## Sample input/output files: 
 see sample-input-output directory 
 
