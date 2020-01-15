@@ -1,32 +1,87 @@
 #  DP-Address-Project 
 This project was done for Decision Point Healthcare Solutions: https://decisionpointhealth.com 
 
+This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
+services to process that data for validation, standardization and geocoding. It then produces processed output data which matching the form of the input. 
+A different third party API may provide any depending on how the progmam is set up so long as an address service class for that service is set up . 
+
 ### Notes :
  - Third Party Forward GeoCoding and Address Valdiation Service: Smarty Streets 
  - Third Party Reverse Geocoding Service: Open cage geocoding 
  - These third party services are interchangable with other services so long as they adhere to sturcture 
-   defined by address service abstract class ( see address_service.py )
+   defined by address service abstract class ( see address_service.py ) e.g. 
+   smarty streets does all but reverse geocoding, which opencage handles. 
 
-## Sample usage :
 
-### For Address Validation and Forward Geocoding ###
-python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_and_validation_output.csv' --options 0
- 
-### For Forward Address Geocoding Only ###
-python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/forward_geocoding_output.csv' --options 1
+## Setup and Usage:
 
-### For Address Validation Only ###
-python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/validation_output.csv' --options 2
+### Setup 
+- python 3.6 or higher required 
 
-### For Reverse Address Geocoding Only ###
-python3 main.py --config ../config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/reverse_geocoding_output.csv' --options 3
+- Dependencies from third party services 
+    Smarty Streets: pip3 install smartystreets_python_sdk
+    more info: (https://github.com/smartystreets/smartystreets-python-sdk)
+
+    OpenCage: pip3 install opencage
+    more info: (https://opencagedata.com/tutorials/geocode-in-python)
+
+- Go to Services website for API keys and fill them in a sample_config.cfg file 
+    - For Smarty Streets : 
+      1. go to https://smartystreets.com/pricing and choose the free
+         option with 250 lookups per month (wow!). 
+      2. Make an account (no account verification needed)
+      3. Go to the account management dashboard and API keys section to get 
+         your Auth ID and Auth Token 
+      4. Fill in your auth_id and auth_token (under those names) in the sample_config.cfg 
+         file in under the smarty streets header
+    - For Open Cage: 
+      1. go to https://opencagedata.com/pricing and choose the free option limited to 
+         2,500 req/day and 1 req/sec  
+      2. Make an account and verfiy by email 
+      3. Get your API key by email after having an acct. 
+      4. put it in the auth_key section of sample_config.cfg under the 
+         open cage header 
+      
+
+
+### Program Usage
+first cd into directory: dp-provider-address/src
+   
+#### For Batch Input: 
+Running the following example commands should work as is and output csv files to
+'/dp-provider-address/sample-input-output/out.csv' if set up above is completed correctly.
+      
+  ##### For Address Validation and Forward Geocoding #####
+  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
+  
+  ##### For Address Validation Only #####
+  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out' --options 1
+
+  ##### For Forward Geocoding Only #####
+  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
+
+  ##### For Reverse Geocoding #####
+  python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
+
+#### For Stream Input: 
+Running the following example commands should work as is and will both return and print the string results 
+for the given input. 
+  
+  ##### For Address Validation and Forward Geocoding #####
+  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 0
+
+  ##### For Address Validation Only #####
+  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 1
+
+  ##### For Address Forward Geocoding Only #####
+  python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 2
+
+  ##### For Address Reverse Geocoding Only #####
+  python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 2
 
 
 ## Sample input/output files: 
 see sample-input-output directory 
 
-## Dependencies/ Setup 
- External depencies needed are for the third party python sdk's used in the 
- service specific implmementation of address classes
- - Smarty streets: pip3 install smartystreets_python_sdk (https://github.com/smartystreets/smartystreets-python-sdk)
- - Open Cage: pip3 install opencage (https://opencagedata.com/tutorials/geocode-in-python)
+
+ 

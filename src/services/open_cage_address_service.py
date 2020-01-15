@@ -3,8 +3,8 @@ import configparser
 from opencage.geocoder import OpenCageGeocode
 from opencage.geocoder import InvalidInputError, RateLimitExceededError, UnknownError
 
-from ..models.address import Address
-from ..models.address_service import AddressService
+from models.address import Address
+from models.address_service import AddressService
  
 class OpenCageAddressService (AddressService):
     """
@@ -22,7 +22,7 @@ class OpenCageAddressService (AddressService):
         """ Resonsible for loading configs and setting up client """
         config = configparser.ConfigParser()
         config.read(config_file)
-        auth_key = config.get('OPEN CAGE', 'key' )
+        auth_key = config.get('OPEN CAGE', 'auth_key' )
         self.client = OpenCageGeocode(auth_key)
 
 

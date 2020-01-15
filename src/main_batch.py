@@ -1,19 +1,15 @@
-import argparse
-import sys
+import argparse, sys
 
-from .services.open_cage_address_service import OpenCageAddressService
-from .services.smarty_address_service import SmartyAddressService
-from .utilities import batch_io
+from services.open_cage_address_service import OpenCageAddressService
+from services.smarty_address_service import SmartyAddressService
+from utilities import batch_io
 
 #TODO: fix file structure/import statements
         
 """
 Entry point for batch processing of addresses 
 
-# Sample usage from dp-provider-address folder 
-
-python3 -m src.batch_main --config config.cfg --infile 'sample-input-output/sample_coordinate_input.csv' 
---outfile 'sample-input-output/out.csv' --options 3
+see readme for usage details 
 """
 
 def run(args=None):

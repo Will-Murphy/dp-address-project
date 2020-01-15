@@ -1,4 +1,4 @@
-from ..models.address import Address
+from models.address import Address
 
 """
 Stream input/output utilities for creating of dp-address stream endpoint. 
@@ -44,7 +44,7 @@ def construct_validation_output( processed_address_list ):
 def construct_foward_geocode_output( processed_address_list ): 
     processed_address = __get_single_address_from_list(processed_address_list) 
     if processed_address.is_valid is True: 
-        return f"{processed_address.latitude, processed_address.longitude}"
+        return f' "{processed_address.latitude}, {processed_address.longitude}" '
     else:
         return f'{processed_address.input_string}  is not valid'
 

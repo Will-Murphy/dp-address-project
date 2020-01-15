@@ -1,23 +1,15 @@
-import argparse
-import sys
+import argparse, sys
 
-from .services.open_cage_address_service import OpenCageAddressService
-from .services.smarty_address_service import SmartyAddressService
-from .utilities import stream_io
+from services.open_cage_address_service import OpenCageAddressService
+from services.smarty_address_service import SmartyAddressService
+from utilities import stream_io
 
 #TODO: fix file structure/import statement
         
 """
 Entry point for stream processing of addresses 
 
-# Sample usage
-from dp-provider-address-folder:
-
-    python3 -m src.stream_main --config config.cfg --input "2 Oliver St, Boston MA"  --options 0
-
-or reverse gorcoding:
-
-    python3 -m src.stream_main --config config.cfg --input "-71.15064, 42.14055"  --options 3
+see readme for usage details 
 """
 
 def run(args=None):

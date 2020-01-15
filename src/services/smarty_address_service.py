@@ -1,11 +1,10 @@
 import configparser
-
-#TODO: alias these objects with names that make more sense. 
+ 
 from smartystreets_python_sdk import StaticCredentials, exceptions, Batch, ClientBuilder
 from smartystreets_python_sdk.us_street import Lookup
 
-from ..models.address import Address
-from ..models.address_service import AddressService
+from models.address import Address
+from models.address_service import AddressService
 
 class SmartyAddressService (AddressService):
     """
@@ -27,8 +26,8 @@ class SmartyAddressService (AddressService):
         """ Resonsible for loading configs and setting up client """
         config = configparser.ConfigParser()
         config.read(config_file)
-        auth_id = config.get('SMARTY STREETS', 'id' )
-        auth_token = config.get('SMARTY STREETS', 'key')
+        auth_id = config.get('SMARTY STREETS', 'auth_id' )
+        auth_token = config.get('SMARTY STREETS', 'auth_token')
         api_credentials = StaticCredentials(auth_id, auth_token)
         self.client = ClientBuilder(api_credentials).build_us_street_api_client()
 
@@ -68,7 +67,6 @@ class SmartyAddressService (AddressService):
         
         returns a list containing a single Address object for stream input and multiple for batch input.
         """
-
         processed_address_list = []
         # check avoids redundancy for combined 'forward geocode and validate' as API does both by default
         if self.__is_address_list_processed:
