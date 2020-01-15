@@ -5,11 +5,11 @@ This project handles stream/batch of address data, either in coordinate or strin
 services and to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
 
 #### Notes: ####
-   **Third Party Services**
+**Third Party Services**
  - Third Party Forward GeoCoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
  - Third Party Reverse Geocoding Service: OpenCageData (https://opencagedata.com)
 
-   **Implementation details**
+**Implementation details**
  - These third party services are interchangable with other services so long as their implementations reside
    in classes that inherit from the *AddressService* abstract class ( see **src/models/address_service.py** ) e.g. 
    *SmartStreetsAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
