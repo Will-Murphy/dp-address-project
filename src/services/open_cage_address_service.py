@@ -80,11 +80,15 @@ class OpenCageAddressService (AddressService):
             if result and len(result):
                 address.latitude = result[0]['geometry']['lat']
                 address.longitude = result[0]['geometry']['lng']
+                address.is_valid = True
+            else: 
+                address.is_valid = False
             processed_address_list.append(address)
 
         print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
-        
+    
+    #TODO: FIGURE OUT ADDRESS FORMAT AND WHERE/HANDLE TO STORE IT
     def reverse_geocode(self, params, address_input_data):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
@@ -98,6 +102,9 @@ class OpenCageAddressService (AddressService):
             self.num_addresses_processed += 1
             if result and len(result):
                 address.line_1 = result[0]['formatted']
+                address.is_valid = True
+            else: 
+                address.is_valid = False
             processed_address_list.append(address)
 
         print(f'< {self.num_addresses_processed} addresses processed >')

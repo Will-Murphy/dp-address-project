@@ -1,5 +1,6 @@
 from models.address import Address
 
+#TODO: FIGURE OUT DESIRED OUTPUT FORMATTING AND UPDATE HERE 
 """
 Stream input/output utilities for creating of dp-address stream endpoint. 
 
@@ -38,7 +39,7 @@ def construct_geocode_and_validiation_output( processed_address_list):
         return f'"{processed_address.line_1}, {processed_address.line_2}", ' \
                f'"{processed_address.latitude}, {processed_address.longitude}"'
     else:
-        return f'{processed_address.input_string} is not valid'
+        return f'address:"{processed_address.input_string}" is invalid'
 
 
 def construct_validation_output( processed_address_list ):
@@ -46,7 +47,7 @@ def construct_validation_output( processed_address_list ):
     if processed_address.is_valid is True: 
         return f' "{processed_address.line_1}, {processed_address.line_2}"'
     else:
-        return f'{processed_address.input_string} is not valid'
+        return f'address:"{processed_address.input_string}" is invalid'
 
 
 def construct_foward_geocode_output( processed_address_list ): 
@@ -54,7 +55,7 @@ def construct_foward_geocode_output( processed_address_list ):
     if processed_address.is_valid is True: 
         return f' "{processed_address.latitude}, {processed_address.longitude}" '
     else:
-        return f'{processed_address.input_string}  is not valid'
+        return f'"{processed_address.input_string}" is invalid'
 
 
 #TODO: standardize convention returned for error here.. none or false?

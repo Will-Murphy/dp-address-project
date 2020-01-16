@@ -3,6 +3,23 @@
 
 This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
 services and to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
+
+## Notes: 
+   **Third Party Services Used**
+   - Third Party Forward Geocoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
+   - Third Party Reverse Geocoding Service (though forward geocoding implemented for use here as well): OpenCageData (https://opencagedata.com)
+
+   **Implementation Details**
+   - These third party services are interchangable with other services so long as their implementations (**src/services/...**) reside
+      in classes that inherit from the *AddressService* abstract class (**src/models/address_service.py**) e.g. 
+      *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
+      from *AddressService*
+   - All data processing done inside these third party implementations of *AddressService* classes is done in terms of the *Address* 
+     objects (**src/models/Address.py**)
+   - All input/output and formatting is handled by utililites(**src/utilities/..**)
+   - Designed so you can run addresses through multiple rounds of processing by composing functionality from two different services or 
+     within the same service.
+     (see **src/main_batch.py** & **src/main_batch.py** )
  
 ## Setup and Requirements:
 - python 3.6 or higher required 
@@ -50,7 +67,7 @@ sample input file and options selected. **program arguments**:
    ```
    ##### Batch Address Validation Only: option 1 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../ sample-input-output/out' --options 1
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 1
    ```
    ##### Batch Forward Geocoding Only: option 2 #####
    ```
@@ -58,7 +75,7 @@ sample input file and options selected. **program arguments**:
    ```
    ##### Batch Reverse Geocoding: option 3 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../ sample-input-output/out.csv' --options 3
+   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
    ```
 
 #### For Single String Stream Input: 
@@ -85,26 +102,25 @@ for given input. **program arguments**:
    python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 3
    ```
 
-## Sample input/output files for batch processing: 
+## Sample Input/Output Files For Batch Processing: 
 see **sample-input-output** directory for sample csv files
 
+## Detils on Program Behaviour(in progress):
 
-## Notes: 
-   **Third Party Services Used**
-   - Third Party Forward Geocoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
-   - Third Party Reverse Geocoding Service (though forward geocoding implemented for use here as well): OpenCageData (https://opencagedata.com)
+edit null string / True or false behaviour in IO_utilities 
+Validation: FOR WRONG/malformatted ADDRESSES, Progam ALWAYS CORRECTS AND RETURNS TRUE
+            if it can find a match 
+            
+            otherwise it returns false. 
+            
+## Next Steps(in progress): 
 
-   **Implementation Details**
-   - These third party services are interchangable with other services so long as their implementations (**src/services/...**) reside
-      in classes that inherit from the *AddressService* abstract class (**src/models/address_service.py**) e.g. 
-      *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
-      from *AddressService*
-   - All data processing done inside these third party implementations of *AddressService* classes is done in terms of the *Address* 
-     objects (**src/models/Address.py**)
-   - All input/output and formatting is handled by utililites(**src/utilities/..**)
-   - Designed so you can run addresses through multiple rounds of processing by different services of different parts of the same service, 
-      so that various functionality can be composed.
-     (see **src/main_batch.py** & **src/main_batch.py** )
+test/test plans 
+smarty invalid issues 
+compose invalid addresses from smarty with open cage to ensure they are really invalid
+turn into flask api 
+add option to return invalid address list
+third party address parsing (99% correct and free) 
    
 
 

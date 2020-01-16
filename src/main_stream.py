@@ -1,4 +1,5 @@
-import argparse, sys
+import argparse
+import sys
 
 from services.open_cage_address_service import OpenCageAddressService
 from services.smarty_address_service import SmartyAddressService

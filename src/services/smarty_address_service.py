@@ -14,7 +14,7 @@ class SmartyAddressService (AddressService):
     It implements that abstract class with helper methods that deal with 
     its specific API implmentation.
     """
-    MAX_ADDRESSES_PER_REQUEST = 100 
+    MAX_ADDRESSES_PER_REQUEST = 100  #100 is limit set by Smarty API
 
     def __init__(self):
         self.client = None 
@@ -89,7 +89,6 @@ class SmartyAddressService (AddressService):
                                    'does not provide this service')
     
 
-
     ############ Smarty Specific Processing Helpers ############
     def __prepare_smarty_request_list(self, address_list):
         """
@@ -119,7 +118,8 @@ class SmartyAddressService (AddressService):
     # TODO: python boolean or string for is_valid parameter?
     def __process_smarty_request_list(self, request_list, address_input_data ):
         """
-        Process address input data contained in request list through smarty streets API
+        Process request list through smarty streets API and assign response to 
+        corresponding address objects.
 
         Each individual request contains SmartyAddressService.MAX_ADDRESSES_PER_REQUEST 
         address Lookups, which are assigned candidate addresses by their api. This function 
@@ -138,7 +138,7 @@ class SmartyAddressService (AddressService):
                 address = next(address_iterator)
                 if len(candidates) == 0:
                     address.is_valid = False
-                    print(f'{address.input_string} is invalid')
+                    # TODO: add invalid addresses to list here
                 else:
                     address.longitude = candidates[0].metadata.longitude
                     address.latitude = candidates[0].metadata.latitude

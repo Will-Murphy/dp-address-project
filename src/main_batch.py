@@ -1,4 +1,5 @@
-import argparse, sys
+import argparse
+import sys
 
 from services.open_cage_address_service import OpenCageAddressService
 from services.smarty_address_service import SmartyAddressService
@@ -38,13 +39,15 @@ def run(args=None):
     elif int(args['options']) == 2:
         print(f'< using {type(address_service).__name__} for forward geocoding >')
         input_address_list = batch_io.read_address_input(args["infile"])
-        processed_address_list = address_service.forward_geocode(args, input_address_list)
+        processed_address_list = address_service.forward_geocode(args, 
+                                                                 input_address_list)
         batch_io.write_forward_geocode_csv_output(processed_address_list, args['outfile'] )
 
     elif int(args['options']) == 3:
-        print(f'< using {type(address_service).__name__} for reverse geocoding >')
+        print(f'< using {type(address_service_2).__name__} for reverse geocoding >')
         input_coordinate_list = batch_io.read_coordinate_input(args["infile"])
-        processed_address_list = address_service_2.reverse_geocode(args, input_coordinate_list)
+        processed_address_list = address_service_2.reverse_geocode(args, 
+                                                                   input_coordinate_list)
         batch_io.write_reverse_geocode_csv_output(processed_address_list, args['outfile'] )
 
     else: 
