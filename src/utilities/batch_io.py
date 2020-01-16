@@ -6,7 +6,7 @@ from models.address import Address
 Input/output utilities to help address service class read and produce csv files 
 """
 
-############ Functions to read from csv input files ############# (make a class?)
+############ Functions to read from csv input files ############# 
 def read_address_input(infile):
     with open (infile, newline = '') as csv_address_infile:
         csvReader = csv.reader(csv_address_infile, delimiter = ',')
@@ -42,8 +42,9 @@ def read_coordinate_input(infile):
 # helpers to ensure correct format of input 
 def __check_address_input(csvReader):
     try:
-        headers = csvReader.__next__() 
-        assert len(headers) == 1, "input must consist of address csv with one column called 'address' "
+        csv_headers = csvReader.__next__() 
+        assert len(csv_headers) == 1, \
+               "input must consist of address csv with one column called 'address' "
     except StopIteration:
         print("\n Error: ensure input file not empty \n")
         raise 
@@ -52,8 +53,9 @@ def __check_address_input(csvReader):
 
 def __check_coordinate_input(csvReader):
     try:
-        headers = csvReader.__next__() 
-        assert len(headers) == 2, "input must be csv with two columns of coordinates: 'latitude', 'longitude' "
+        csv_headers = csvReader.__next__() 
+        assert len(csv_headers) == 2, \
+               "input must be csv with two columns of coordinates: 'latitude', 'longitude' "
     except StopIteration:
         print("\n Error: ensure input file not empty \n")
         raise 
@@ -61,8 +63,8 @@ def __check_coordinate_input(csvReader):
         raise
 
 
-    
-############ Functions to write to csv output files ############# (make a class?)
+
+############ Functions to write to csv output files ############# 
 def write_forward_geocode_csv_output(processed_address_list, outfile):
     with open (outfile, 'w', newline = '') as csv_address_outfile: 
         csvWriter = csv.writer(csv_address_outfile, delimiter = ',')
@@ -115,7 +117,8 @@ def __write_validation_data(csvWriter, address):
 
 
 def __write_general_header(csvWriter): 
-    csvWriter.writerow(['address', 'is_valid', 'corrected_address', 'latitude', 'longitude'])
+    csvWriter.writerow(['address', 'is_valid', \
+                        'corrected_address', 'latitude', 'longitude'])
 
 def __write_general_data(csvWriter, address):
     csvWriter.writerow([f'{str(address.input_string)}',

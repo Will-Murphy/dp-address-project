@@ -7,9 +7,9 @@ from utilities import batch_io
 #TODO: fix file structure/import statements
         
 """
-Entry point for batch processing of addresses 
+Entry point for batch processing of addresses.It produces output to a csv file. 
 
-see readme for usage details 
+see readme for usage details.
 """
 
 def run(args=None):
@@ -21,10 +21,12 @@ def run(args=None):
     address_service_2.load_config(args['config'])
     
     if int(args['options']) == 0:
-        print(f'< using {type(address_service).__name__} for address validation and forward geocoding >')
+        print(f'< using {type(address_service).__name__} ' \
+               'for address validation and forward geocoding >')
         input_address_list = batch_io.read_address_input(args["infile"])
         validated_address_list = address_service.validate(args, input_address_list)
-        processed_address_list = address_service.forward_geocode(args, validated_address_list)
+        processed_address_list = address_service.forward_geocode(args, 
+                                                                 validated_address_list)
         batch_io.write_general_csv_output(processed_address_list, args['outfile'] )
     
     elif int(args['options']) == 1:
@@ -62,7 +64,6 @@ if __name__ == '__main__':
     arg_parser.add_argument('--options', nargs='?', default=0, required=False, 
         help='options to choose what program outputs')
     
-     
     # Get variables from the arguments
     args = vars(arg_parser.parse_args(sys.argv[1:]))
     

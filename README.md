@@ -3,32 +3,14 @@
 
 This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
 services and to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
-
-### Notes: ###
-   **Third Party Services Used**
-   - Third Party Forward GeoCoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
-   - Third Party Reverse Geocoding Service: OpenCageData (https://opencagedata.com)
-
-   **Implementation details**
-   - These third party services are interchangable with other services so long as their implementations (**src/services/...**) reside
-      in classes that inherit from the *AddressService* abstract class (**src/models/address_service.py**) e.g. 
-      *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
-      from *AddressService*
-   - All data processing done inside these third party implementations of *AddressService* classes is done terms of the *Address* 
-     objects (**src/models/Address.py**)
-   - All input/output and formatting is handled by utililites(**src/utilities/..**)
-   
-
-
-## Setup and Usage:
-
-### Setup and Requirements
+ 
+## Setup and Requirements:
 - python 3.6 or higher required 
 
 - Smarty Streets official python sdk: ```pip3 install smartystreets_python_sdk```
   - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-- OpenCage official recommended python sdk: ```pip3 install opencage```
+- OpenCage recommended python sdk: ```pip3 install opencage```
   - more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
 - Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
@@ -48,19 +30,17 @@ services and to process that data for validation, standardization and geocoding.
       4. put it in the auth_key section of **sample_config.cfg** under the 
          open cage header 
       
+## Program Usage: 
 
+first cd into src directory: **dp-provider-address/src/* 
 
-### Program Usage
-first cd into src directory: **dp-provider-address/src/** 
-
-   
 #### For Batch CSV Input: 
 Running the following example commands should work as is if set up above is completed correctly,
 resulting in sample output to '/dp-provider-address/sample-input-output/out.csv' based on the 
 sample input file and options selected. **program arguments**:
 -  ```--config```  configuration file (see sample_config.cfg)
--  ```--infile```  input csv batch file (see sample_inputs)
--  ```--outfile``` output csv batch file to direct output to
+-  ```--infile```  input csv batch file (see sample-input-output dir)
+-  ```--outfile``` output csv batch file (see sample-input-output dir)
 -  ```--options``` options for processing input data (see below)
 
       
@@ -107,6 +87,26 @@ for given input. **program arguments**:
 
 ## Sample input/output files for batch processing: 
 see **sample-input-output** directory for sample csv files
+
+
+## Notes: 
+   **Third Party Services Used**
+   - Third Party Forward Geocoding and Address Valdiation Service: SmartyStreets (https://smartystreets.com) 
+   - Third Party Reverse Geocoding Service (though forward geocoding implemented for use here as well): OpenCageData (https://opencagedata.com)
+
+   **Implementation Details**
+   - These third party services are interchangable with other services so long as their implementations (**src/services/...**) reside
+      in classes that inherit from the *AddressService* abstract class (**src/models/address_service.py**) e.g. 
+      *SmartyAddressService* does all but reverse geocoding, which *OpenCageAddressService* handles, and both inherit 
+      from *AddressService*
+   - All data processing done inside these third party implementations of *AddressService* classes is done in terms of the *Address* 
+     objects (**src/models/Address.py**)
+   - All input/output and formatting is handled by utililites(**src/utilities/..**)
+   - Designed so you can run addresses through multiple rounds of processing by different services of different parts of the same service, 
+      so that various functionality can be composed.
+     (see **src/main_batch.py** & **src/main_batch.py** )
+   
+
 
 
  
