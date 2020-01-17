@@ -4,9 +4,7 @@ import sys
 from services.open_cage_address_service import OpenCageAddressService
 from services.smarty_address_service import SmartyAddressService
 from utilities import batch_io
-
-#TODO: fix file structure/import statements
-        
+       
 """
 Entry point for batch processing of addresses.It produces output to a csv file. 
 

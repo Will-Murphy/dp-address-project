@@ -8,13 +8,13 @@ from models.address_service import AddressService
  
 class OpenCageAddressService (AddressService):
     """
-    Class represents Open Cage reverse and forward geocoding specific 
-    implementation of AddressService class. 
-    
+    Class represents Open Cage implementation of AddressService class. It 
+    provides reverse and forward geocoding. 
+
     Open cage is rate limited based on API access tier, so request 
     response time will be variable. 
     """ 
-
+    
     def __init__(self):
         self.client = None
         self.num_addresses_processed = 0 
@@ -55,16 +55,6 @@ class OpenCageAddressService (AddressService):
         except InvalidInputError as invalid_err:
             print(invalid_err)
             raise
-
-    def validate(self, params, data ):
-        """ 
-        Reponsible for validating input addresses in stream or batch form.
-        
-        returns a list containing a single Address object for stream input 
-        and multiple for batch input.
-        """
-        raise NotImplementedError(f'{type(self).__name__}' \
-                                   'does not provide this service')
         
     def forward_geocode(self, params, address_input_data):
         """ 
@@ -88,7 +78,6 @@ class OpenCageAddressService (AddressService):
         print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
     
-    #TODO: FIGURE OUT ADDRESS FORMAT AND WHERE/HANDLE TO STORE IT
     def reverse_geocode(self, params, address_input_data):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.

@@ -4,9 +4,7 @@ import sys
 from services.open_cage_address_service import OpenCageAddressService
 from services.smarty_address_service import SmartyAddressService
 from utilities import stream_io
-
-#TODO: fix file structure/import statement
-        
+    
 """
 Entry point for stream processing of addresses. It prints & returns an 
 output string.
@@ -69,8 +67,8 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description="provider address handler")
     arg_parser.add_argument('--config', nargs='?', default=None, required=True, 
         help='specified output file required')
-    arg_parser.add_argument('--input', nargs='?', default=None, required=True, 
-        help='')
+    arg_parser.add_argument('--input', nargs='?', type=str, default=None, required=True, 
+        help='Input String, make sure there is a space between coordinate string')
     arg_parser.add_argument('--options', nargs='?', default=0, required=False, 
         help='options to choose what program outputs')
     

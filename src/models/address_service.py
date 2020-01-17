@@ -1,29 +1,22 @@
-from abc import ABC, abstractmethod
-
-class AddressService (ABC): 
+class AddressService (): 
     """ 
     Abstract Class to standardize third party service specific 
     implementation of the dp-address-project specifications. 
     
-    If a method is not provided by a particular service implmentation, 
-    the method should raise an error and tell the user so e.g.:
-
-        def reverse_geocode(self, params, data):
-            raise NotImplementedError(f'{type(self).__name__}' \
-                                   'does not provide this service')
+    If a method is not provided by a particular service implmentation 
+    and is called the method will raise an error.
     """
 
-    @abstractmethod
     def load_config(self, config_file):
         """Resonsible for loading configs & setting up client"""
-        pass
+        raise NotImplementedError(f'{type(self).__name__} ' \
+                                   'has not implemented this method')
 
-    @abstractmethod
     def send_request(self, params:dict,  data):
-        """Responsible for sending a request to service"""
-        pass
+        """Responsible for sending request to service"""
+        raise NotImplementedError(f'{type(self).__name__} ' \
+                                   'has not implemented this method')
 
-    @abstractmethod
     def validate(self, params:dict, data ):
         """ 
         Reponsible for validating input addresses in stream or batch form.
@@ -31,9 +24,9 @@ class AddressService (ABC):
         returns a list containing a single Address object for stream input 
         and multiple for batch input.
         """
-        pass 
+        raise NotImplementedError(f'{type(self).__name__} ' \
+                                   'has not implemented this method')
     
-    @abstractmethod
     def forward_geocode(self, params:dict, data):
         """ 
         Reponsible for forward geocoding input addresses in stream or batch form.
@@ -41,9 +34,9 @@ class AddressService (ABC):
         returns a list containing a single Address object for stream input 
         and multiple for batch input.
         """
-        pass 
+        raise NotImplementedError(f'{type(self).__name__} ' \
+                                   'has not implemented this method')
 
-    @abstractmethod
     def reverse_geocode(self, params:dict, data):
         """ 
         Reponsible for reverse geocoding input addresses in stream or batch form.
@@ -51,5 +44,6 @@ class AddressService (ABC):
         returns a list containing a single Address object for stream input 
         and multiple for batch input.
         """
-        pass
+        raise NotImplementedError(f'{type(self).__name__} ' \
+                                   'has not implemented this method')
     

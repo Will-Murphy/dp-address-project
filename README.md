@@ -87,19 +87,19 @@ for given input. **program arguments**:
   
    ##### Stream Address Validation and Forward Geocoding: option 0 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 0
+   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 0
    ```
    ##### Stream Address Validation Only: option 1 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 1
+   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 1
    ```
    ##### Stream Address Forward Geocoding Only: option 2 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input "2 Oliver St, Boston MA"  --options 2
+   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 2
    ```
    ##### Stream Address Reverse Geocoding Only: option 3 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input  "42.3574, -71.05477"  --options 3
+   python3 main_stream.py --config ../sample_config.cfg --input="42.3574, -71.05477"  --options 3
    ```
 
 ## Sample Input/Output Files For Batch Processing: 
@@ -108,10 +108,22 @@ see **sample-input-output** directory for sample csv files
 ## Detils on Program Behaviour(in progress):
 
 edit null string / True or false behaviour in IO_utilities 
-Validation: FOR WRONG/malformatted ADDRESSES, Progam ALWAYS CORRECTS AND RETURNS TRUE
+
+Validation: For incorrect/malformatted addresses for which Smarty Streets can find a match, as well as for ones
+            which are already valid without changes, this program returns **"TRUE"** in the **is_valid** column of output
+            and returns a standardized address as follows in the **corrected_address** column. 
+
+            [address line 1 (i.e. number - street - specific details)], [address line 2 (i.e. city - state - zipcode+4)]
+
+            If there is no match it returns "FALSE" is_valid column, and nothing in the corrected address.
+
+, Progam ALWAYS CORRECTS AND RETURNS TRUE
             if it can find a match 
             
             otherwise it returns false. 
+Geocoding: 
+
+Reverse Geocoding: Will sometimes give street number, but usually if its not accurate enough, 
             
 ## Next Steps(in progress): 
 

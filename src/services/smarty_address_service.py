@@ -8,11 +8,8 @@ from models.address_service import AddressService
 
 class SmartyAddressService (AddressService):
     """
-    Class represents Smarty Streets US_STREETS_API validatation and forward 
-    geocoding specific implementation AddressService class
-
-    It implements that abstract class with helper methods that deal with 
-    its specific API implmentation.
+    Class represents Smarty Streets implementation of AddressService class. 
+    It provides address validatation and forward geocoding in one request.
     """
     MAX_ADDRESSES_PER_REQUEST = 100  #100 is limit set by Smarty API
 
@@ -80,13 +77,6 @@ class SmartyAddressService (AddressService):
             self.__is_address_list_processed = True
             print(f'< {self.num_addresses_processed} addresses processed >')
         return processed_address_list
-        
-    def reverse_geocode(self, params, coordinate_input_data):
-        """ 
-        Smarty Streets API does not support reverse geocoding
-        """
-        raise NotImplementedError(f'{type(self).__name__}' \
-                                   'does not provide this service')
     
 
     ############ Smarty Specific Processing Helpers ############

@@ -1,14 +1,13 @@
-from models.address import Address
-
-#TODO: FIGURE OUT DESIRED OUTPUT FORMATTING AND UPDATE HERE 
 """
-Stream input/output utilities for creating of dp-address stream endpoint. 
+Stream input/output utilities for creating of dp-address stream endpoint.
+Responsible for creation of address objects from input. 
 
 Note: In order to resuse batch logic in address service classes, address 
 and coordinates string inputs are converted into list containing a single 
 address object, and from a list back into an address object before being 
 processed for output. 
 """
+from models.address import Address
 
 ############ Functions to Read Input Strings  ############# 
 def read_address_input(address_string): 
@@ -35,37 +34,47 @@ def read_coordinate_input(coordinate_string):
 ############ Functions to Constuct Output Strings ############# 
 def construct_geocode_and_validiation_output( processed_address_list):
     processed_address = __get_single_address_from_list(processed_address_list)
+    output_address = processed_address.get_standardized_string()
+    output_coordinates = processed_address.get_coordinates_string()
+    input_string = processed_address.input_string
+
     if processed_address.is_valid is True: 
-        return f'"{processed_address.line_1}, {processed_address.line_2}", ' \
-               f'"{processed_address.latitude}, {processed_address.longitude}"'
+        return f'"{output_address}", "{output_coordinates}"'       
     else:
-        return f'address:"{processed_address.input_string}" is invalid'
+        return f'address:"{input_string}" is invalid'
 
 
 def construct_validation_output( processed_address_list ):
     processed_address = __get_single_address_from_list(processed_address_list)   
+    output_address = processed_address.get_standardized_string()
+    input_string = processed_address.input_string
+
     if processed_address.is_valid is True: 
-        return f' "{processed_address.line_1}, {processed_address.line_2}"'
+        return f'"{output_address}"'
     else:
-        return f'address:"{processed_address.input_string}" is invalid'
+        return f'address:"{input_string}" is invalid'
 
 
 def construct_foward_geocode_output( processed_address_list ): 
     processed_address = __get_single_address_from_list(processed_address_list) 
+    output_coordinates = processed_address.get_coordinates_string()
+    input_string = processed_address.input_string
+
     if processed_address.is_valid is True: 
-        return f' "{processed_address.latitude}, {processed_address.longitude}" '
+        return f'"{output_coordinates}"'       
     else:
-        return f'"{processed_address.input_string}" is invalid'
+        return f'address:"{input_string}" is invalid'
 
 
-#TODO: standardize convention returned for error here.. none or false?
 def construct_reverse_geocode_output( processed_address_list): 
     processed_address = __get_single_address_from_list(processed_address_list) 
-    if processed_address.line_1 is not None: 
-        return f' "{processed_address.line_1}" '
+    output_address = processed_address.get_standardized_string()
+    input_string =  processed_address.get_coordinates_string()
+    
+    if processed_address.is_valid is True: 
+        return f'"{output_address}"'
     else:
-        return f'coordinates:"{processed_address.latitude}' \
-               f', {processed_address.longitude}" are not valid'
+        return f'coordinates:"{input_string}" is invalid'
 
 
 
