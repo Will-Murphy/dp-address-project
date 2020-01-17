@@ -107,61 +107,62 @@ see **sample-input-output** directory for sample csv files
 
 ## Details on Third Party Specific Program Behavior:
 
-###Validation with Smarty Streets: 
+### Validation with Smarty Streets: 
 
-####details####:
+#### details:
 For incorrect/malformatted addresses for which Smarty Streets can find a match, as well as for ones
 which are already valid without changes, it will return it a list of candidates with standardized address 
 as follows (note this can also be broken into its further components):
 
-      {address line 1 (i.e. number - street - specific details)}, {address line 2 (i.e. city - state - zip+4)}
+   ```{address line 1 (i.e. number - street - specific details)}, {address line 2 (i.e. city - state - zip+4)} ```
 
 This program chooses the one in which it is most confident, as it rates each candidates confidence level. If it can find 
 none with confidence, it returns none, meaning it believes the address to be invalid. Smarty streets also returns an 
 analysis of the input address which can be further analyzed but is not in this program. 
 
 There are some valid addresses are marked as invalid by smarty streets. Some particularly long( with long building names) or specifically formatted addresses dont
-work well with smarty streets as it has trouble parsing out the address components. Below are some example problem inputs and potential solutions included in next steps:
+work well with smarty streets as it has trouble parsing out the address components. Below are a couple example problem inputs. potential solutions included in 
+next steps section:
 
-**5453 HIGHWAY 2 , PRIEST RIVER ID 83856**
-**8390 HIGHWAY 51 NORTH 101, MILLINGTON TN 38053**
-**LIFESPAN THERAPY 118 MEDICAL DRIVE, CARMEL IN 46032**
-**YORK ANESTHESIOLOGISTS FIRST AVENUE AT 16TH STREET, NEW YORK NY 10003**
+- **5453 HIGHWAY 2 , PRIEST RIVER ID 83856**
+- **8390 HIGHWAY 51 NORTH 101, MILLINGTON TN 38053**
+- **LIFESPAN THERAPY 118 MEDICAL DRIVE, CARMEL IN 46032**
+- **YORK ANESTHESIOLOGISTS FIRST AVENUE AT 16TH STREET, NEW YORK NY 10003**
 
-####batch####:
+#### batch:
 This program returns **"TRUE"** in the **is_valid** column of output
 and returns the above standardized address in the **corrected_address** column if smarty streets
 can find one . This happens *EVEN IF THE INPUT ADDRESS IS ALREADY CORRECT*: Otherwise **is_valid** 
 is **False** and **corrected_address** is the empty string. 
 
-###stream####: 
+#### stream: 
 If an address string is found to be valid, the same type of standardized address as is in **batch** above is returned 
 *EVEN IF THE INPUT ADDRESS IS ALREADY CORRECT*. Otherwise a string saying the input address string is invalid is returned. 
 
-###Forward Geocoding with Smarty Streets: ###
+### Forward Geocoding with Smarty Streets:
 
-####details####: 
+#### details:
 Smarty Streets Validates and Forward geocodes in one step, geocoding only after address has been validated. 
 
-####batch####:
+#### batch:
 After address is validated, populates **latitude**, **longitude** csv column with closest coordinates tha could be found to input address. If address could not 
 be validated or coordinates not found, those columns will contain the empty string **""**
 
-####stream####: 
+#### stream: 
 After input address string is validated, a string containing coordinates returned. Otherwise a 
 string saying the input address string is invalid is returned. 
 
 ### Reverse Geocoding with Open Cage: ###
 
-####details####:
+#### details:
 Given an coordinate set, Open Cage (and nearly all reverse geocodoers) will try to match the the coordinates to the nearest, most specific address down to the street number. 
 It cant find a specific location, it will return the street, and then the city etc... 
 If there is no match it will return nothing. 
 
-####batch####: 
+#### batch: 
 Given an lat, long batch, the most specific address found will be output to the **address** column, otherwise returns the empty string **""**. 
 
-####stream####: 
+#### stream: 
 Given input coordinate string, returns string the most specific address found, string saying the input coordinare string is invalid is returned. 
 
             
@@ -169,7 +170,7 @@ Given input coordinate string, returns string the most specific address found, s
  
 ### Solve False Invalid Address Outputs (address marked invalid when its really valid): ### 
 (see details in validation with smarty streets section for more info on why this needed )
-- Multi-Service Script Composition Solution: 
+- **Multi-Service Script Composition Solution:**
              - Add a parameter to **batch_main.py** called --invalid_list that 
                when given a file name, produces a csv of input addresses found to be
                invalid and their index in the original input csv in conjuction with 
@@ -178,7 +179,7 @@ Given input coordinate string, returns string the most specific address found, s
                invalid list and with a different service (open cage or other), 
                in order to double check problem inputs. If they are found to be wrongly 
                marked invalid, update original input csv. 
-- Address Parsing Script Compostion Solution:
+- **Address Parsing Script Compostion Solution:**
              - Add a parameter to **batch_main.py** called --invalid_list that 
                when given a file name, produces a csv of input addresses found to be
                invalid and their index in the original input csv in conjuction with 
@@ -189,7 +190,7 @@ Given input coordinate string, returns string the most specific address found, s
                address into compoenents) .If they are found to be wrongly marked invalid, update 
                original input csv. 
                (https://github.com/openvenues/libpostal)
-- Try Another Service: 
+- **Try Another Service: (hopefully as simple as creating another address class)**
             - Map based service: Smarty Validates addresses based on the USPS database of deliverable addresses, 
               whereas google uses mapping data to place an address string as accurately as it can on a map. 
               Once google (or other services) do this it can give you directions there accurately, 
@@ -201,7 +202,7 @@ Given input coordinate string, returns string the most specific address found, s
               the USPS database, but on there is no indication that they are any better than smarty that I could
               fine online, and most they don't include trials or pricing so it was hard to compare. 
 
-###Turn into flask API: ###
+### Turn into flask API: 
 
 - Make a flask API that depending on request type and params will call this program so that it correctly 
 returns the service the user is looking for, and allow for composition of script calls as mentioned in 
@@ -209,7 +210,7 @@ the **Solve False Invalid Address Outputs** section above.
 
 - This will allow this program to be exposed to multiple  end users and make it more dynamic 
 
-###Test: ###
+### Test: 
  
 - Integration testing: check that different needs and use cases are adaqautely provided by this service
                        both for data and product teams. 
