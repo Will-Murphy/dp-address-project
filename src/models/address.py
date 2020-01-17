@@ -13,8 +13,8 @@ class Address ():
     
     def get_standardized_string(self):    
         """
-        Return correctly formatted address string based on address object 
-        attributes. "Standardized" formatting based on user specifications.
+        Return "Standardized", formatted address string based on address object 
+        attributes. 
 
         useful only after address is processed and validated.
         """

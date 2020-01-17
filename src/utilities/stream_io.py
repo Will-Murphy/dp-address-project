@@ -11,7 +11,6 @@ from models.address import Address
 
 ############ Functions to Read Input Strings  ############# 
 def read_address_input(address_string): 
-    #TODO: fix logic here for better input checking 
     assert len(str(address_string)) > 0, \
            "address input should be a string of nonzero length"
     address = Address() 
@@ -21,7 +20,6 @@ def read_address_input(address_string):
 
 def read_coordinate_input(coordinate_string): 
     coordinates = coordinate_string.split(",")
-    #TODO: fix logic here for better input checking 
     assert len(coordinates) == 2, \
            "coordinate input should be a string as follows '<latitude>, <longitude>' "
     address = Address() 
@@ -75,8 +73,6 @@ def construct_reverse_geocode_output( processed_address_list):
         return f'"{output_address}"'
     else:
         return f'coordinates:"{input_string}" is invalid'
-
-
 
 ############ Helpers Convert Address Objects to and From List ############
 def __get_list_from_single_address(address):
