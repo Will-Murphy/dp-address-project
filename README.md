@@ -109,7 +109,7 @@ see **sample-input-output** directory for sample csv files
 
 ### Validation with Smarty Streets: 
 
-#### important details:
+#### Important Details:
 For incorrect/malformatted addresses for which Smarty Streets is still able to find a match, as well as for ones
 which are already valid without changes, the API will return a list of candidates with standardized address 
 as follows (note this can also be broken into its further components):
@@ -121,7 +121,7 @@ This program chooses the one in which Smarty's API is most confident, as it rate
 find confident matches, it returns none, meaning it believes the address to be invalid. In both cases, smarty streets also returns an 
 analysis of the input address, which can be further analyzed but is not in this implementation. 
 
-NOTE: Smarty Streets is very good at only returning addresses if they are valid. However, There are a non-neglible number 
+***NOTE:*** Smarty Streets is very good at only returning addresses if they are valid. However, There are a non-neglible number 
 of seemingly valid addresses that are marked as Invalid by smarty streets (seems around %2-5). For these it seems that 
 SMARTY API has trouble parsing out the address components for particularly long( with long building names) or specifically 
 formatted addresses. Potential solutions included in next steps section. 
@@ -133,40 +133,40 @@ Here are a couple example problem inputs with no smarty candidates returned but 
 - **HILLTOWN COMMUNITY HEALTH CENTER - SCHOOL-BASED PROGRAM 12 LITTLEVILLE ROAD, HUNTINGTON MA 01050**
 - **1401 N WINDING BROOK LOOP, PALMER AK 99645**
 
-#### batch behavior:
+#### Batch Behavior:
 If smarty streets can find a candidate, this program returns **"TRUE"** in the **is_valid** column of output
 and returns the above standardized address of the top candidate in the **corrected_address** column. 
 This happens *EVEN IF THE INPUT ADDRESS IS ALREADY CORRECT*. Otherwise **is_valid** 
 is **"FALSE** and **corrected_address** is the empty string. 
 
-#### stream behavior: 
+#### Stream Behavior: 
 If an address string is found to be valid, the same type of standardized address as is in **batch** above is returned 
 *EVEN IF THE INPUT ADDRESS IS ALREADY CORRECT*. Otherwise a string saying the input address string is invalid is returned. 
 
 ### Forward Geocoding with Smarty Streets:
 
-#### important details:
+#### Important Details:
 Smarty Streets Validates and Forward geocodes in one step, geocoding only after address has been validated. 
 
-#### batch behavior:
+#### Batch Behavior:
 After address is validated, populates **latitude**, **longitude** csv column with closest coordinates tha could be found to input address. If address could not 
 be validated or coordinates not found, those columns will contain the empty string.
 
-#### stream behavior: 
+#### Stream Behavior: 
 After input address string is validated, a string containing coordinates returned. Otherwise a 
 string saying the input address string is invalid is returned. 
 
 ### Reverse Geocoding with Open Cage: ###
 
-#### important details:
+#### Important Details:
 Given an coordinate set, Open Cage (and nearly all reverse geocodoers) will try to match the the coordinates to the nearest, most specific address down to the street number. 
 It cant find a specific location, it will return the street, and then the city etc... 
 If there is no match it will return nothing. 
 
-#### batch behavior: 
+#### Batch Behavior: 
 Given an lat, long batch, the most specific address found will be output to the **address** column, otherwise returns the empty string **""**. 
 
-#### stream behavior: 
+#### Stream Behavior: 
 Given input coordinate string, returns string the most specific address found, string saying the input coordinare string is invalid is returned. 
 
             
@@ -213,12 +213,12 @@ the **Solve False Invalid Address Outputs** section above.
 
 - This will allow this program to be exposed to multiple  end users and make it more dynamic 
 
-### Test: 
- 
+### Testing: 
 - **Integration testing:** check that different needs and use cases are adaqautely provided by this service
                        both for data and product teams. 
 - **Unit Testing:** Most of the functions will check for invalid input and but all cases on ever function 
                 have not been tested for. 
+
 
 
    
