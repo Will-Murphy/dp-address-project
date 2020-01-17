@@ -183,29 +183,29 @@ Given input coordinate string, returns string the most specific address found, s
                in order to double check problem inputs. If they are found to be wrongly 
                marked invalid, update original input csv. 
 - **Address Parsing Script Compostion Solution:**
-      - Add a parameter to **batch_main.py** called --invalid_list that 
+   - Add a parameter to **batch_main.py** called --invalid_list that 
                when given a file name, produces a csv of input addresses found to be
                invalid and their index in the original input csv file.
-      - Use open source address parser to break invalid addresses into components
+   - Use open source address parser to break invalid addresses into components
                and feed that input back into smarty streets ( so it can validate more 
                effectively, and some of these address parsers are up to 99% accurate in breaking
                address into compoenents) .If they are found to be wrongly marked invalid, update 
                original input csv. 
                (https://github.com/openvenues/libpostal)
 - **Try Another Service: (hopefully as simple as creating another address class)**
-      - Map Based Service: Smarty Validates addresses based on the USPS database of deliverable addresses, 
+   - Map Based Service: Smarty Validates addresses based on the USPS database of deliverable addresses, 
               whereas google uses mapping data to place an address string as accurately as it can on a map. 
               Once google (or other services) do this it can give you directions there accurately, 
               but it doesn't really care if the address itself is valid, as long as it maps correctly 
               location-wise.Still, it seems to find addresses better through this method, 
               and potentially could turn out to be a better fit for DP's use cases, even though it is not strictly
               validating. 
-      - Another Validation service: There are multiple other enterprise level validation services using 
+   - Another Validation service: There are multiple other enterprise level validation services using 
               the USPS database, but I could find no indication that they are any better than smarty, 
               and most they don't include trials or pricing so it was hard to compare - but still might 
               be worth looking into. 
 
-### Turn into flask API: 
+### Turn Into Available Microservive Flask API: 
 
 - Make a flask API that depending on request type and params will call this program so that it correctly 
 returns the service the user is looking for, and allow for composition of script calls as mentioned in 
