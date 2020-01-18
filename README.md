@@ -1,8 +1,7 @@
 #  DP-Address-Project 
 *This project was done for Decision Point Healthcare Solutions:* https://decisionpointhealth.com 
 
-This project handles stream/batch of address data, either in coordinate or string form, and provides an interface to connect to third party 
-services in order to process that data for validation, standardization and geocoding. It then produces processed output data which matches the form of the input. 
+Command line tool for proccessing stream/batch address data for validation, standardization and two-way geocoding. Provides an internal interface for connecting too and implementing third party services to process address data and produce desired output data. 
 
 ## Notes: 
    **Third Party Services Used**
@@ -16,10 +15,8 @@ services in order to process that data for validation, standardization and geoco
       from *AddressService*
    - All data processing done inside these third party implementations of *AddressService* classes is done in terms of the *Address* 
      objects (**src/models/Address.py**)
-   - All input/output is handled by utililites(**src/utilities/..**)
-   - Designed so you can run addresses through multiple rounds of processing by composing functionality from two different services or 
-     within the same service.
-     (see **src/main_batch.py** & **src/main_batch.py** )
+   - All input/output of address objects is handled by utililites(**src/utilities/..**)
+   - Designed to allow for running address data through multiple rounds of processing by composing functionality from two different services    or within the same service (see **src/main_batch.py** & **src/main_batch.py** )
  
 ## Setup and Requirements:
 - python 3.6 or higher required 
@@ -49,7 +46,7 @@ services in order to process that data for validation, standardization and geoco
       
 ## Program Usage: 
 
-first cd into src directory: **dp-provider-address/src/* 
+first cd into src directory: **dp-provider-address/src/**
 
 #### For Batch CSV Input: 
 Running the following example commands should work as is if set up above is completed correctly,
@@ -110,21 +107,19 @@ see **sample-input-output** directory for sample csv files
 ### Validation with Smarty Streets: 
 
 #### Important Details:
-For incorrect/malformatted addresses for which Smarty Streets is still able to find a match, as well as for ones
-which are already valid without changes, the API will return a list of candidates with standardized address 
-as follows (note this can also be broken into its further components):
+
+If Smarty Streets finds a valid match on an address string, the API will return a list of candidates with address formatted data,
+components, metadata, and analysis. For incorrect/malformatted addresses for which Smarty Streets is still able to find a match, as well as for ones which are already valid without changes, this program grabs the formatted address delivery line 1 and line 2 of the top candidate match that the API can find to provide a validated, standardized address as follows. 
 
    ```
    [address line 1 (i.e. number - street - specific details)], [address line 2 (i.e. city - state - zip+4)] 
    ```
-This program chooses the one in which Smarty's API is most confident, as it rates each candidates confidence level. If it can't 
-find confident matches, it returns none, meaning it believes the address to be invalid. In both cases, smarty streets also returns an 
-analysis of the input address, which can be further analyzed but is not in this implementation. 
+The lookup parameters by default are set to return a candidate only if smarty streets is very confident in its match. This program chooses strictly the candidate in which Smarty's API is most confident. If it can't find confident matches, it returns no candiates, meaning the address is invalid. In both cases though, the API also returns an analysis of the input address, and an option to allow for less stringent validation, which could be helpful moving forward..
 
 ***NOTE:*** Smarty Streets is very good at only returning addresses if they are valid. However, There are a non-neglible number 
-of seemingly valid addresses that are marked as Invalid by smarty streets (seems around %2-5). For these it seems that 
+of seemingly valid addresses that are marked as Invalid by smarty streets (seems around %2-3). For these it seems that 
 SMARTY API has trouble parsing out the address components for particularly long( with long building names) or specifically 
-formatted addresses. Potential solutions included in next steps section. 
+formatted addresses, and is not confident in its matches. Potential solutions included in next steps section. 
 Here are a couple example problem inputs with no smarty candidates returned but which are valid. 
 
 - **5453 HIGHWAY 2, PRIEST RIVER ID 83856**
@@ -134,8 +129,7 @@ Here are a couple example problem inputs with no smarty candidates returned but 
 - **1401 N WINDING BROOK LOOP, PALMER AK 99645**
 
 #### Batch Behavior:
-If smarty streets can find a candidate, this program returns **"TRUE"** in the **is_valid** column of output
-and returns the above standardized address of the top candidate in the **corrected_address** column. 
+If smarty streets is able to find a candidate, this program returns **"TRUE"** in the **is_valid** column of output and returns the above standardized address of the top candidate in the **corrected_address** column. 
 This happens *EVEN IF THE INPUT ADDRESS IS ALREADY CORRECT*. Otherwise **is_valid** 
 is **"FALSE** and **corrected_address** is the empty string. 
 
@@ -159,8 +153,8 @@ string saying the input address string is invalid is returned.
 ### Reverse Geocoding with Open Cage: ###
 
 #### Important Details:
-Given an coordinate set, Open Cage (and nearly all reverse geocodoers) will try to match the the coordinates to the nearest, most specific address down to the street number. 
-It cant find a specific location, it will return the street, and then the city etc... 
+Given an coordinate set, Open Cage (and nearly all reverse geocodoers) will try to match the the coordinates to the nearest, most specific address down to the street number so address formatting may vary.
+For example, If it can't find a specific location, it will return the street, and then the city etc... 
 If there is no match it will return nothing. 
 
 #### Batch Behavior: 
@@ -192,20 +186,28 @@ Given input coordinate string, returns string the most specific address found, s
                address into compoenents) .If they are found to be wrongly marked invalid, update 
                original input csv. 
                (https://github.com/openvenues/libpostal)
+- **Tweak and Further Eplore Smarty Address Parameters** 
+   - More specifically, tweak lookup parameters to make criteria for address validation 
+      less stringent, and return less false invalids. Or, dive deeper in the analysis returned on input addresses for which no 
+      match was found. 
 - **Try Another Service: (hopefully as simple as creating another address class)**
    - Map Based Service: Smarty Validates addresses based on the USPS database of deliverable addresses, 
               whereas google uses mapping data to place an address string as accurately as it can on a map. 
-              Once google (or other services) do this it can give you directions there accurately, 
+              Google (or other map focused services) do this to give you directions there accurately, 
               but it doesn't really care if the address itself is valid, as long as it maps correctly 
-              location-wise.Still, it seems to find addresses better through this method, 
-              and potentially could turn out to be a better fit for DP's use cases, even though it is not strictly
-              validating. 
+              location-wise. Though not strictly validation, this type of lookup potentially could turn out to be a better fit for DP's use cases.
    - Another Validation service: There are multiple other enterprise level validation services using 
               the USPS database, but I could find no indication that they are any better than smarty, 
               and most they don't include trials or pricing so it was hard to compare - but still might 
               be worth looking into. 
 
-### Turn Into Available Microservive Flask API: 
+### Future Changes in Outputted CSV Formatting or Specific Formatting of Standardized Addresses: 
+
+- Future changes in how the program rights out True, False, and NULL values into the output csv can be changed with the constants at the top of the **src/utililities/batch_io.py** file. Ideally these would be made program inputs to **main_batch.py**
+- Future changes to standardized address output format should be done by changing the get_standardized_string()
+  method in the Address class in **src/models/address.py** . 
+  
+### Turn Into Available Microservive with Python Flask: 
 
 - Make a flask API that depending on request type and params will call this program so that it correctly 
 returns the service the user is looking for, and allow for composition of script calls as mentioned in 
