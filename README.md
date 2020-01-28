@@ -1,7 +1,7 @@
 #  DP-Address-Project 
 *This project was done for Decision Point Healthcare Solutions:* https://decisionpointhealth.com 
 
-Command line tool for proccessing stream/batch address data for validation, standardization and two-way geocoding. Provides an internal interface for connecting too and implementing third party services to process address data and produce desired output data. 
+Microservice for proccessing stream/batch address data for validation, standardization and two-way geocoding. Provides an internal interface for connecting too and implementing third party services to process address data and produce desired output data. 
 
 ## Notes: 
    **Third Party Services Used**
