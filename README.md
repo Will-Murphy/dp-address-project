@@ -21,10 +21,10 @@ Microservice for proccessing stream/batch address data for validation, standardi
 ## Setup and Requirements:
 - python 3.6 or higher required 
 
-- Smarty Streets official python sdk: ```pip3 install smartystreets_python_sdk```
+- Smarty Streets official python sdk: ```pip install smartystreets_python_sdk```
   - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-- OpenCage recommended python sdk: ```pip3 install opencage```
+- OpenCage recommended python sdk: ```pip install opencage```
   - more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
 - Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
@@ -60,19 +60,19 @@ sample input file and options selected. **program arguments**:
       
    ##### Batch Address Validation and Forward Geocoding: option 0 #####
    ```  
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
    ```
    ##### Batch Address Validation Only: option 1 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 1
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 1
    ```
    ##### Batch Forward Geocoding Only: option 2 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
    ```
    ##### Batch Reverse Geocoding: option 3 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
    ```
 
 #### For Single String Stream Input: 
@@ -84,19 +84,19 @@ for given input. **program arguments**:
   
    ##### Stream Address Validation and Forward Geocoding: option 0 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 0
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 0
    ```
    ##### Stream Address Validation Only: option 1 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 1
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 1
    ```
    ##### Stream Address Forward Geocoding Only: option 2 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 2
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 2
    ```
    ##### Stream Address Reverse Geocoding Only: option 3 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="42.3574, -71.05477"  --options 3
+   python main_stream.py --config ../sample_config.cfg --input="42.3574, -71.05477"  --options 3
    ```
 
 ## Sample Input/Output Files For Batch Processing: 
