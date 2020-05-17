@@ -1,7 +1,7 @@
 #  DP-Address-Project 
 *This project was done for Decision Point Healthcare Solutions:* https://decisionpointhealth.com 
 
-Command line tool for proccessing stream/batch address data for validation, standardization and two-way geocoding. Provides an internal interface for connecting too and implementing third party services to process address data and produce desired output data. 
+Microservice for proccessing stream/batch address data for validation, standardization and two-way geocoding. Provides an internal interface for connecting too and implementing third party services to process address data and produce desired output data. 
 
 ## Notes: 
    **Third Party Services Used**
@@ -21,10 +21,10 @@ Command line tool for proccessing stream/batch address data for validation, stan
 ## Setup and Requirements:
 - python 3.6 or higher required 
 
-- Smarty Streets official python sdk: ```pip3 install smartystreets_python_sdk```
+- Smarty Streets official python sdk: ```pip install smartystreets_python_sdk```
   - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
 
-- OpenCage recommended python sdk: ```pip3 install opencage```
+- OpenCage recommended python sdk: ```pip install opencage```
   - more info: (https://opencagedata.com/tutorials/geocode-in-python)
 
 - Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
@@ -60,19 +60,19 @@ sample input file and options selected. **program arguments**:
       
    ##### Batch Address Validation and Forward Geocoding: option 0 #####
    ```  
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 0
    ```
    ##### Batch Address Validation Only: option 1 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 1
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 1
    ```
    ##### Batch Forward Geocoding Only: option 2 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_address_input.csv' --outfile '../sample-input-output/out.csv' --options 2
    ```
    ##### Batch Reverse Geocoding: option 3 #####
    ```
-   python3 main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
+   python main_batch.py --config ../sample_config.cfg --infile '../sample-input-output/sample_coordinate_input.csv' --outfile '../sample-input-output/out.csv' --options 3
    ```
 
 #### For Single String Stream Input: 
@@ -84,19 +84,19 @@ for given input. **program arguments**:
   
    ##### Stream Address Validation and Forward Geocoding: option 0 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 0
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 0
    ```
    ##### Stream Address Validation Only: option 1 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 1
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 1
    ```
    ##### Stream Address Forward Geocoding Only: option 2 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 2
+   python main_stream.py --config ../sample_config.cfg --input="2 Oliver St, Boston MA"  --options 2
    ```
    ##### Stream Address Reverse Geocoding Only: option 3 #####
    ```
-   python3 main_stream.py --config ../sample_config.cfg --input="42.3574, -71.05477"  --options 3
+   python main_stream.py --config ../sample_config.cfg --input="42.3574, -71.05477"  --options 3
    ```
 
 ## Sample Input/Output Files For Batch Processing: 
@@ -119,8 +119,8 @@ The lookup parameters by default are set to return a candidate only if smarty st
 ***NOTE:*** Smarty Streets is very good at only returning addresses if they are valid. However, There are a non-neglible number 
 of seemingly valid addresses that are marked as Invalid by smarty streets (seems around %2-3). For these it seems that 
 SMARTY API has trouble parsing out the address components for particularly long( with long building names) or specifically 
-formatted addresses, and is not confident in its matches. Potential solutions included in next steps section. 
-Here are a couple example problem inputs with no smarty candidates returned but which are valid. 
+formatted addresses, and is not confident in its matches.
+Below are a couple example problem inputs with no smarty candidates returned but which are valid. 
 
 - **5453 HIGHWAY 2, PRIEST RIVER ID 83856**
 - **8390 HIGHWAY 51 NORTH 101, MILLINGTON TN 38053**
@@ -162,69 +162,3 @@ Given an lat, long batch, the most specific address found will be output to the 
 
 #### Stream Behavior: 
 Given input coordinate string, returns string the most specific address found, string saying the input coordinare string is invalid is returned. 
-
-            
-## Next Steps: 
- 
-### Solve False Invalid Address Outputs (address marked invalid when its really valid): ### 
-(see details in validation with smarty streets section for more info on why this needed )
-- **Multi-Service Script Composition Solution:**
-    - Add a parameter to **batch_main.py** called --invalid_list that 
-               when given a file name, produces a csv of input addresses found to be
-               invalid and their index in the original input csv.
-     - Compose calls to this program to run address validation again but now on 
-               this narrowed down invalid list and with a different service (open cage or other), 
-               in order to double check problem inputs. If they are found to be wrongly 
-               marked invalid, update original input csv. 
-- **Address Parsing Script Compostion Solution:**
-   - Add a parameter to **batch_main.py** called --invalid_list that 
-               when given a file name, produces a csv of input addresses found to be
-               invalid and their index in the original input csv file.
-   - Use open source address parser to break invalid addresses into components
-               and feed that input back into smarty streets ( so it can validate more 
-               effectively, and some of these address parsers are up to 99% accurate in breaking
-               address into compoenents) .If they are found to be wrongly marked invalid, update 
-               original input csv. 
-               (https://github.com/openvenues/libpostal)
-- **Tweak and Further Eplore Smarty Address Parameters** 
-   - More specifically, tweak lookup parameters to make criteria for address validation 
-      less stringent, and return less false invalids. Or, dive deeper in the analysis returned on input addresses for which no 
-      match was found. 
-- **Try Another Service: (hopefully as simple as creating another address class)**
-   - Map Based Service: Smarty Validates addresses based on the USPS database of deliverable addresses, 
-              whereas google uses mapping data to place an address string as accurately as it can on a map. 
-              Google (or other map focused services) do this to give you directions there accurately, 
-              but it doesn't really care if the address itself is valid, as long as it maps correctly 
-              location-wise. Though not strictly validation, this type of lookup potentially could turn out to be a better fit for DP's use cases.
-   - Another Validation service: There are multiple other enterprise level validation services using 
-              the USPS database, but I could find no indication that they are any better than smarty, 
-              and most they don't include trials or pricing so it was hard to compare - but still might 
-              be worth looking into. 
-
-### Future Changes in Outputted CSV Formatting or Specific Formatting of Standardized Addresses: 
-
-- Future changes in how the program rights out True, False, and NULL values into the output csv can be changed with the constants at the top of the **src/utililities/batch_io.py** file. Ideally these would be made program inputs to **main_batch.py**
-- Future changes to standardized address output format should be done by changing the get_standardized_string()
-  method in the Address class in **src/models/address.py** . 
-  
-### Turn Into Available Microservive with Python Flask: 
-
-- Make a flask API that depending on request type and params will call this program so that it correctly 
-returns the service the user is looking for, and allow for composition of script calls as mentioned in 
-the **Solve False Invalid Address Outputs** section above. 
-
-- This will allow this program to be exposed to multiple  end users and make it more dynamic 
-
-### Testing: 
-- **Integration testing:** check that different needs and use cases are adaqautely provided by this service
-                       both for data and product teams. 
-- **Unit Testing:** Most of the functions will check for invalid input and but all cases on ever function 
-                have not been tested for. 
-
-
-
-   
-
-
-
- 
