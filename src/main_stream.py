@@ -55,7 +55,7 @@ def run(args=None):
                                                               input_coordinate_list)
         output_string = stream_io.construct_reverse_geocode_output(
                                                               processed_address)
-        output_string = print(output_string)
+        print(output_string)
         return output_string
 
     else: 

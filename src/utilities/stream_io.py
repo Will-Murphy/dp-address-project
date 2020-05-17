@@ -37,9 +37,9 @@ def construct_geocode_and_validiation_output( processed_address_list):
     input_string = processed_address.input_string
 
     if processed_address.is_valid is True: 
-        return f'"{output_address}", "{output_coordinates}"'       
+        return f'valid address: "{output_address}", "{output_coordinates}"'       
     else:
-        return f'address:"{input_string}" is invalid'
+        return f'invalid address: "{input_string}"'
 
 
 def construct_validation_output( processed_address_list ):
@@ -48,9 +48,9 @@ def construct_validation_output( processed_address_list ):
     input_string = processed_address.input_string
 
     if processed_address.is_valid is True: 
-        return f'"{output_address}"'
+        return f'valid address: "{output_address}"'
     else:
-        return f'address:"{input_string}" is invalid'
+        return f'invalid address: "{input_string}"'
 
 
 def construct_foward_geocode_output( processed_address_list ): 
@@ -59,9 +59,9 @@ def construct_foward_geocode_output( processed_address_list ):
     input_string = processed_address.input_string
 
     if processed_address.is_valid is True: 
-        return f'"{output_coordinates}"'       
+        return f'valid address: "{output_coordinates}"'       
     else:
-        return f'address:"{input_string}" is invalid'
+        return f'invalid address: "{input_string}"'
 
 
 def construct_reverse_geocode_output( processed_address_list): 
@@ -70,9 +70,9 @@ def construct_reverse_geocode_output( processed_address_list):
     input_string =  processed_address.get_coordinates_string()
     
     if processed_address.is_valid is True: 
-        return f'"{output_address}"'
+        return f'valid coordinates: "{output_address}"'
     else:
-        return f'coordinates:"{input_string}" is invalid'
+        return f'invalid coordinates: "{input_string}"'
 
 ############ Helpers Convert Address Objects to and From List ############
 def __get_list_from_single_address(address):
