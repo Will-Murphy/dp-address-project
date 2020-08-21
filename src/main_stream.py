@@ -21,7 +21,7 @@ def run(args=None):
     address_service_2.load_config(args['config'])
 
     if int(args['options']) == 0:
-        print(f'< using {type(address_service).__name__}' 
+        print(f'< using {type(address_service).__name__} ' 
                'for address validation and forward geocoding >')
         input_address = stream_io.read_address_input(args["input"])
         validated_address = address_service.validate(args, input_address)

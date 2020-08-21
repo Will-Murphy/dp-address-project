@@ -105,7 +105,6 @@ class SmartyAddressService (AddressService):
             request_list.append(single_request_batch_partition)
         return request_list
 
-    # TODO: python boolean or string for is_valid parameter?
     def __process_smarty_request_list(self, request_list, address_input_data ):
         """
         Process request list through smarty streets API and assign response to 
