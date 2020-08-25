@@ -24,9 +24,9 @@ Microservice for proccessing stream/batch address data for validation, standardi
 1. python 3.6 or higher required 
 
 2. External Python Depenedencies using ```pipenv```
-  2a. cd src directory: **dp-provider-address/src/**
-  2b. if your don't already have it download pipenv: ```$ pip install pipenv```
-  2c. run ```pipenv install && pipenv shell```
+  a. cd src directory: **dp-provider-address/src/**
+  b. if your don't already have it download pipenv: ```pip install pipenv```
+  c. run ```pipenv install && pipenv shell```
   
 3. Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
     - For Smarty Streets : 
