@@ -17,17 +17,18 @@ Microservice for proccessing stream/batch address data for validation, standardi
      objects (**src/models/Address.py**)
    - All input/output of address objects is handled by utililites(**src/utilities/..**)
    - Designed to allow for running address data through multiple rounds of processing by composing functionality from two different services    or within the same service (see **src/main_batch.py** & **src/main_batch.py** )
+   - Smarty Streets official python sdk was used to implement *SmartyAddressService* : (https://github.com/smartystreets/smartystreets-python-sdk)
+   - OpenCage recommended python sdk was used to implemement *OpenCageAddressService*: (https://opencagedata.com/tutorials/geocode-in-python)
  
 ## Setup and Requirements:
-- python 3.6 or higher required 
+1. python 3.6 or higher required 
 
-- Smarty Streets official python sdk: ```pip install smartystreets_python_sdk```
-  - more info: (https://github.com/smartystreets/smartystreets-python-sdk)
-
-- OpenCage recommended python sdk: ```pip install opencage```
-  - more info: (https://opencagedata.com/tutorials/geocode-in-python)
-
-- Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
+2. External Python Depenedencies using ```pipenv```
+  2a. cd src directory: **dp-provider-address/src/**
+  2b. if your don't already have it download pipenv: ```$ pip install pipenv```
+  2c. run ```pipenv install && pipenv shell```
+  
+3. Go to Services website for API keys and fill them in the **src/sample_config.cfg** file 
     - For Smarty Streets : 
       1. go to https://smartystreets.com/pricing and choose the free
          option with 250 lookups per month (wow!). 
@@ -44,9 +45,9 @@ Microservice for proccessing stream/batch address data for validation, standardi
       4. put it in the auth_key section of **sample_config.cfg** under the 
          open cage header 
       
-## Program Usage: 
+## Program Usage:
 
-first cd into src directory: **dp-provider-address/src/**
+Ensure you are in **dp-provider-address/src/** with pipenv shell activated and installed ( setup step 2)
 
 #### For Batch CSV Input: 
 Running the following example commands should work as is if set up above is completed correctly,
