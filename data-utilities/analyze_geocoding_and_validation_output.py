@@ -9,11 +9,11 @@ usage:
         
 '''
 def run(args=None):
-    create_cleaned_batch(args)
+    analyze_output(args)
 
 
 #TODO: clean up this method 
-def create_cleaned_batch(args):
+def analyze_output(args):
     with open (args['infile'], newline = '') as csv_infile:
         csvReader = csv.DictReader(csv_infile, delimiter = ',')
         row = csvReader.__next__()
