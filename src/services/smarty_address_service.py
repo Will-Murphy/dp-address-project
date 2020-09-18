@@ -19,14 +19,18 @@ class SmartyAddressService (AddressService):
         self.__total_addresses_in_request_list = 0
         self.__is_address_list_processed = False
 
-    def load_config(self, config_file):
+    def load_config(self, config_file, usage):
         """Resonsible for loading configs and setting up client"""
         config = configparser.ConfigParser()
         config.read(config_file)
         auth_id = config.get('SMARTY STREETS', 'auth_id' )
         auth_token = config.get('SMARTY STREETS', 'auth_token')
         api_credentials = StaticCredentials(auth_id, auth_token)
-        self.client = ClientBuilder(api_credentials).build_us_street_api_client()
+        client_builder =  ClientBuilder(api_credentials)
+        if usage == 'batch': 
+            client_builder.with_custom_header( {'Connection':'keep-alive'} )
+        
+        self.client = client_builder.build_us_street_api_client()
 
     def send_request(self, params, address_data):
         """Responsible for sending request to service"""

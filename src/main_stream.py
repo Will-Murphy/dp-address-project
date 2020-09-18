@@ -15,10 +15,10 @@ see readme for usage details.
 def run(args=None):
 
     address_service = SmartyAddressService()
-    address_service.load_config(args['config'])
+    address_service.load_config(args['config'], args['usage'])
 
     address_service_2 = OpenCageAddressService()
-    address_service_2.load_config(args['config'])
+    address_service_2.load_config(args['config'], args['usage'])
 
     if int(args['options']) == 0:
         print(f'< using {type(address_service).__name__} ' 
@@ -76,5 +76,7 @@ if __name__ == '__main__':
     args = vars(arg_parser.parse_args(sys.argv[1:]))
     
     print(f'args: {args}')
+
+    args['usage'] = 'stream'
  
     run(args)

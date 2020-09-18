@@ -24,7 +24,7 @@ def analyze_output(args):
         try: 
             while True: 
                 
-                is_address_valid = bool(row["is_valid"])
+                is_address_valid = str(row["is_valid"]) == "TRUE"
                 is_address_geocoded = len(str(row["latitude"])) and len(str(row["longitude"]))
 
                 if is_address_valid: validated_count += 1 
@@ -41,10 +41,6 @@ def analyze_output(args):
         finally: 
            log_validation_and_geocoding_output_stats( validated_count, geocoded_count, total_address_count)
  
-        
-
-            
-
 def log_validation_and_geocoding_output_stats( validated_count, geocoded_count, total_address_count):
     print(f'validated {validated_count} out of {total_address_count} addresses, or {validated_count/total_address_count} percent')
     print(f'geocoded {geocoded_count} out of {total_address_count} addresses, or {geocoded_count/total_address_count} percent')

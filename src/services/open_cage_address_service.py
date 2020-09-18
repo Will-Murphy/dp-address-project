@@ -19,7 +19,7 @@ class OpenCageAddressService (AddressService):
         self.client = None
         self.num_addresses_processed = 0 
 
-    def load_config(self, config_file):
+    def load_config(self, config_file, usage):
         """Resonsible for loading configs and setting up client"""
         config = configparser.ConfigParser()
         config.read(config_file)

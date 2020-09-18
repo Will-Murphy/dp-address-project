@@ -7,7 +7,7 @@ class AddressService ():
     and is called the method will raise an error.
     """
 
-    def load_config(self, config_file):
+    def load_config(self, config_file, usage):
         """Resonsible for loading configs & setting up client"""
         raise NotImplementedError(f'{type(self).__name__} ' \
                                    'has not implemented this method')
